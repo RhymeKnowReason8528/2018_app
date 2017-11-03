@@ -31,8 +31,13 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+//<<<<<<< HEAD
+//import com.qualcomm.robotcore.hardware.Servo;
+//import com.qualcomm.robotcore.util.ElapsedTime;
+//=======
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+//>>>>>>> 74177b342e3971f0edb3f3f2af92dfcf06861cf6
 
 /* 144 lines
  * Human-Controlled Operation program v 1.0 */
@@ -54,6 +59,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class TeleOp extends LinearOpMode {
 
     // Declare OpMode members.
+//<<<<<<< HEAD
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
@@ -65,15 +71,23 @@ public class TeleOp extends LinearOpMode {
     final double GRIPPER_OPEN = 0.59;
 
     private double armPosition = armServo.getPosition();
+//=======
+
+    Robot robot = new Robot();
+//>>>>>>> 74177b342e3971f0edb3f3f2af92dfcf06861cf6
 
     @Override
     public void runOpMode() {
+
+        robot.init(hardwareMap);
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
+//<<<<<<< HEAD
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         gripperOneServo.setPosition(GRIPPER_OPEN);
@@ -82,10 +96,12 @@ public class TeleOp extends LinearOpMode {
         // Reverse the motor that runs backwards when connected directly to the battery
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
+//=======
+//>>>>>>> 74177b342e3971f0edb3f3f2af92dfcf06861cf6
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        runtime.reset();
+        robot.runtime.reset();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -126,12 +142,12 @@ public class TeleOp extends LinearOpMode {
             // rightPower = -gamepad1.right_stick_y ;
 
             // Send calculated power to wheels
-            leftDrive.setPower(leftPower);
-            rightDrive.setPower(rightPower);
+            robot.leftDrive.setPower(leftPower);
+            robot.rightDrive.setPower(rightPower);
 
 
             // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Status", "Run Time: " + robot.runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.addData("Servos", "gripper_one_closed (%)", (gripperOneServo.getPosition() == GRIPPER_CLOSED));
             telemetry.update();
