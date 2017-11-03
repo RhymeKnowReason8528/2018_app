@@ -29,12 +29,13 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
+/* 144 lines
+ * Human-Controlled Operation program v 1.0 */
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -56,6 +57,14 @@ public class TeleOp extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
+    private Servo gripperOneServo = null;
+    private Servo armServo = null;
+
+    final double GRIPPER_CLOSED = 0.72;
+    final double GRIPPER_RELIC_CLOSED = 0.87;
+    final double GRIPPER_OPEN = 0.59;
+
+    private double armPosition = armServo.getPosition();
 
     @Override
     public void runOpMode() {
@@ -67,6 +76,7 @@ public class TeleOp extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        gripperOneServo.setPosition(GRIPPER_OPEN);
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -92,6 +102,23 @@ public class TeleOp extends LinearOpMode {
             leftPower = gamepad1.left_stick_y;
             rightPower = gamepad1.right_stick_y;
 
+            if(gamepad1.right_trigger > 0.5) {
+                gripperOneServo.setPosition(GRIPPER_CLOSED);
+            }
+            if(gamepad1.left_trigger > 0.5) {
+                gripperOneServo.setPosition(GRIPPER_RELIC_CLOSED);
+            }
+            if (gamepad1.right_bumper || gamepad1.left_bumper)  {
+                gripperOneServo.setPosition(GRIPPER_OPEN);
+            }
+
+            if(gamepad1.a) {
+                armServo.setDirection(Servo.Direction.REVERSE);
+            } else if (gamepad1.y) {
+                armServo.setDirection(Servo.Direction.FORWARD);
+            } else {
+                armServo.setPosition(armServo.getPosition());
+            }
 
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
@@ -102,9 +129,11 @@ public class TeleOp extends LinearOpMode {
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
 
+
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            telemetry.addData("Servos", "gripper_one_closed (%)", (gripperOneServo.getPosition() == GRIPPER_CLOSED));
             telemetry.update();
         }
     }
