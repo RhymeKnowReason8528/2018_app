@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 /* 144 lines
  * Human-Controlled Operation program v 1.0 */
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp", group="Linear Opmode") 
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp")
 public class TeleOp extends LinearOpMode {
 
 
