@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
 import com.qualcomm.robotcore.hardware.Servo;
 
 /* 144 lines
@@ -18,26 +17,26 @@ public class TeleOp extends LinearOpMode {
     public void runOpMode() {
 
         // Declare OpMode members.
-        Servo gripperOneServo = null;
-        Servo armServo = null;
-
-        final double GRIPPER_CLOSED = 0.72;
-        final double GRIPPER_RELIC_CLOSED = 0.87;
+        final double GRIPPER_CLOSED = 0.75;
+        final double GRIPPER_RELIC_CLOSED = 0.89;
         final double GRIPPER_OPEN = 0.59;
+        double wristPos = 0.5;
+
+        /*safes
+        final double ovr_arm = 0.1;
+        final double und_arm = 0.1;
+
+        final double ovr_gripper = 0.1;
+        final double und_gripper = 0.1;*/
 
         robot.init(hardwareMap);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
+        robot.gripperOneServo.setPosition(GRIPPER_OPEN);
+        robot.armServo.setPosition(robot.armServo.getPosition());
 
-        gripperOneServo.setPosition(GRIPPER_OPEN);
-
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
         robot.leftDrive.setDirection(DcMotor.Direction.REVERSE);
         robot.rightDrive.setDirection(DcMotor.Direction.FORWARD);
 
@@ -62,21 +61,35 @@ public class TeleOp extends LinearOpMode {
             rightPower = gamepad1.right_stick_y;
 
             if(gamepad1.right_trigger > 0.5) {
-                gripperOneServo.setPosition(GRIPPER_CLOSED);
+                robot.gripperOneServo.setPosition(GRIPPER_CLOSED);
             }
             if(gamepad1.left_trigger > 0.5) {
-                gripperOneServo.setPosition(GRIPPER_RELIC_CLOSED);
+                robot.gripperOneServo.setPosition(GRIPPER_RELIC_CLOSED);
             }
             if (gamepad1.right_bumper || gamepad1.left_bumper)  {
-                gripperOneServo.setPosition(GRIPPER_OPEN);
+                robot.gripperOneServo.setPosition(GRIPPER_OPEN);
             }
 
             if(gamepad1.a) {
-                armServo.setDirection(Servo.Direction.REVERSE);
-            } else if (gamepad1.y) {
-                armServo.setDirection(Servo.Direction.FORWARD);
+                robot.armServo.setDirection(Servo.Direction.FORWARD);
+            } else if (gamepad1.b) {
+                robot.armServo.setDirection(Servo.Direction.REVERSE);
             } else {
-                armServo.setPosition(armServo.getPosition());
+                robot.armServo.setPosition(robot.armServo.getPosition());
+            }
+
+            if(gamepad1.x) {
+                wristPos += 0.005;
+            } else if (gamepad1.y) {
+                wristPos -= 0.005;
+            }
+
+            if (gamepad1.dpad_up) {
+                leftPower = -0.3;
+                rightPower = -0.3;
+            } else if (gamepad1.dpad_down) {
+                leftPower = 0.3;
+                rightPower = 0.3;
             }
 
             /* Tank Mode uses one stick to control each wheel.
@@ -87,13 +100,11 @@ public class TeleOp extends LinearOpMode {
             // Send calculated power to wheels
             robot.leftDrive.setPower(leftPower);
             robot.rightDrive.setPower(rightPower);
+            robot.wristServo.setPosition(wristPos);
 
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + robot.runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.addData("Servos", "gripper_one_closed (%)", (gripperOneServo.getPosition() == GRIPPER_CLOSED));
-            telemetry.addData("Arm", "arm_position (%)", (armServo.getPosition()));
             telemetry.update();
         }
     }

@@ -16,6 +16,7 @@ public class Robot {
     DcMotor rightDrive = null;
     public Servo armServo;
     public Servo gripperOneServo;
+    public Servo wristServo;
 
     public void init (HardwareMap hwmap) {
         leftDrive  = hwmap.dcMotor.get("left_drive");
@@ -23,6 +24,7 @@ public class Robot {
 
         armServo = hwmap.servo.get("arm_servo");
         gripperOneServo = hwmap.servo.get("gripper_one_servo");
+        wristServo = hwmap.servo.get("wrist_servo");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
