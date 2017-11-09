@@ -14,27 +14,31 @@ public class TeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        double wristPos = 0.5;
+        double wristPos = 0.45;
         double armPos = 0.5;
-        double gripperPos = 0.5;
+        double gripperPos = 0;
 
         // Declare OpMode members.
         final double GRIPPER_CLOSED = 0.75;
         final double GRIPPER_RELIC_CLOSED = 0.89;
         final double GRIPPER_OPEN = 0.59;
 
-        final double ovr_wrist = 0.1;
-        final double und_wrist = 0.1;
+        final double wristModify = 0.005;
+        final double armModify = 0.001;
+        final double gripperModify = 0.001;
 
-        final double ovr_gripper = 0.1;
-        final double und_gripper = 0.1;
+        final double ovr_wrist = 0.63;
+        final double und_wrist = 1;
+
+        final double cls_gripper = 0.427;
+        final double opn_gripper = 0;
 
         robot.init(hardwareMap);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        robot.gripperOneServo.setPosition(GRIPPER_OPEN);
+        robot.gripperOneServo.setPosition(gripperPos);
         robot.armServo.setPosition(robot.armServo.getPosition());
 
         robot.leftDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -61,25 +65,27 @@ public class TeleOp extends LinearOpMode {
             rightPower = gamepad1.right_stick_y;
 
             if(gamepad1.right_trigger > 0.5) {
-                gripperPos -= 0.01;
+                if (gripperPos - gripperModify >= opn_gripper) {
+                    gripperPos -= gripperModify;
+                }
             }
-            if(gamepad1.left_trigger > 0.5) {
-                robot.gripperOneServo.setPosition(GRIPPER_RELIC_CLOSED);
-            }
+
             if (gamepad1.right_bumper || gamepad1.left_bumper)  {
-                gripperPos += 0.01;
+                if (gripperPos + gripperModify <= cls_gripper) {
+                    gripperPos += gripperModify;
+                }
             }
 
             if(gamepad1.a && armPos < 0.6) {
-                armPos += 0.01;
+                armPos += armModify;
             } else if (gamepad1.b && armPos > 0.3) {
-                armPos -= 0.01;
+                armPos -= armModify;
             }
 
             if(gamepad1.x) {
-                wristPos += 0.005;
+                wristPos += wristModify;
             } else if (gamepad1.y) {
-                wristPos -= 0.005;
+                wristPos -= wristModify;
             }
 
             if (gamepad1.dpad_up) {
@@ -108,6 +114,8 @@ public class TeleOp extends LinearOpMode {
             telemetry.addData("Gripper", "Position: " + robot.gripperOneServo.getPosition());
             telemetry.addData("Wrist", "Position: " + robot.wristServo.getPosition());
             telemetry.addData("Arm", "Position: " + robot.armServo.getPosition());
+            telemetry.addData("Arm", "armPos: " + armPos);
+            telemetry.addData("A button", "Position: " + gamepad1.a);
             telemetry.update();
         }
     }
