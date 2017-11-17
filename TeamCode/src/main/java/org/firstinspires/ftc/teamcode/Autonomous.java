@@ -36,9 +36,6 @@ public class Autonomous extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        int left_drive_position;
-        int right_drive_position;
-
         double leftPower = 0.75;
         double rightPower = 0.75;
 
@@ -49,21 +46,18 @@ public class Autonomous extends LinearOpMode {
                 break;
             }
 
-            left_drive_position = leftDrive.getCurrentPosition();
-            right_drive_position = rightDrive.getCurrentPosition();
-
             boolean complete = false;
 
             while (!complete) {
-                if (left_drive_position < inchesToTicks(35)) {
+                if (leftDrive.getCurrentPosition() < inchesToTicks(35)) {
                     leftDrive.setPower(leftPower);
                     rightDrive.setPower(rightPower);
                 }
-                if (right_drive_position < inchesToTicks(35)) {
+                if (rightDrive.getCurrentPosition() < inchesToTicks(35)) {
                     leftDrive.setPower(rightPower);
                     rightDrive.setPower(rightPower);
                 }
-                if (left_drive_position >= inchesToTicks(leftPower) && right_drive_position >= inchesToTicks(35)) {
+                if (leftDrive.getCurrentPosition() >= inchesToTicks(leftPower) && rightDrive.getCurrentPosition() >= inchesToTicks(35)) {
                     complete = true;
                 }
             }
