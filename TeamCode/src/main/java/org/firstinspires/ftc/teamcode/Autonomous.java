@@ -23,6 +23,9 @@ public class Autonomous extends LinearOpMode {
 
     //final double position = 1;
 
+    private DcMotor leftDrive = robot.leftDrive;
+    private DcMotor rightDrive = robot.rightDrive;
+
     private double inchesToTicks(double inches) {
         double rotation = 1440;
         double circumference = 12.5663706;
@@ -33,34 +36,32 @@ public class Autonomous extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        robot.leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        robot.rightDrive.setDirection(DcMotor.Direction.REVERSE);
-
-        double left_drive_position;
-        double right_drive_position;
+        int left_drive_position;
+        int right_drive_position;
 
         double leftPower = 0.75;
         double rightPower = 0.75;
 
         waitForStart();
-        robot.runtime.reset();
 
         while (opModeIsActive()) {
             if (getRuntime() >= 29.5) {
                 break;
             }
 
+            left_drive_position = leftDrive.getCurrentPosition();
+            right_drive_position = rightDrive.getCurrentPosition();
+
             boolean complete = false;
 
             while (!complete) {
-                left_drive_position = robot.leftDrive.getCurrentPosition();
-                right_drive_position = robot.rightDrive.getCurrentPosition();
-
                 if (left_drive_position < inchesToTicks(35)) {
-                    robot.leftDrive.setPower(leftPower);
+                    leftDrive.setPower(leftPower);
+                    rightDrive.setPower(rightPower);
                 }
                 if (right_drive_position < inchesToTicks(35)) {
-                    robot.leftDrive.setPower(rightPower);
+                    leftDrive.setPower(rightPower);
+                    rightDrive.setPower(rightPower);
                 }
                 if (left_drive_position >= inchesToTicks(leftPower) && right_drive_position >= inchesToTicks(35)) {
                     complete = true;
