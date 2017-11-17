@@ -4,6 +4,9 @@
         <LynxModule name="Expansion Hub 2" port="2">
             <NeveRest20Gearmotor name="left_drive" port="0" />
             <NeveRest20Gearmotor name="right_drive" port="1" />
+            <Servo name="wrist_servo" port="0" />
+            <Servo name="arm_servo" port="1" />
+            <Servo name="gripper_one_servo" port="2" />
             <LynxEmbeddedIMU name="imu" port="0" bus="0" />
         </LynxModule>
     </LynxUsbDevice>
