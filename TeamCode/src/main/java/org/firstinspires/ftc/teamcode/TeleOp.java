@@ -25,7 +25,7 @@ public class TeleOp extends LinearOpMode {
 
         final double armModify = 0.0006;
         final double gripperModify = 0.001;
-        final double wristModify = 0.001;
+        final double wristModify = 0.0007;
 
         //final double ovr_wrist = 0.63;
         //final double und_wrist = 1;
@@ -69,25 +69,25 @@ public class TeleOp extends LinearOpMode {
 
             if(gamepad2.right_trigger > 0.5 || gamepad2.left_trigger > 0.5) {
                 if (gripperPos - gripperModify >= opn_gripper) {
-                    gripperPos -= gripperModify;
+                    gripperPos = robot.gripperOneServo.getPosition() - gripperModify;
                 }
             }
 
             if (gamepad2.right_bumper || gamepad2.left_bumper)  {
                 if (gripperPos + gripperModify <= cls_gripper) {
-                    gripperPos += gripperModify;
+                    gripperPos = robot.gripperOneServo.getPosition() + gripperModify;
                 }
             }
 
-            if(gamepad2.a && armPos <= ovr_arm) {
+            if(gamepad2.right_stick_y < -0.2 && armPos <= ovr_arm) {
                 armPos += armModify;
-            } else if (gamepad2.y && armPos >= und_arm) {
+            } else if (gamepad2.right_stick_y > 0.2 && armPos >= und_arm) {
                 armPos -= armModify;
             }
 
-            if (gamepad2.dpad_up) {
+            if (gamepad2.left_stick_y < -0.5) {
                 wristPos -= wristModify;
-            } else if (gamepad2.dpad_down) {
+            } else if (gamepad2.left_stick_y > 0.5) {
                 wristPos += wristModify;
             }
 
@@ -127,6 +127,7 @@ public class TeleOp extends LinearOpMode {
             telemetry.addData("Arm", "Position: " + robot.armServo.getPosition());
             telemetry.addData("Arm", "armPos: " + armPos);
             telemetry.addData("A button", "Position: " + gamepad1.a);
+            telemetry.addData("Left Joystick: ",  gamepad2.left_stick_y);
             telemetry.update();
         }
     }
