@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Autonomous v 1.0 */
 
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="RKR Autonomous")
+@Disabled
 public class Autonomous extends LinearOpMode {
 
     private Robot robot = new Robot();

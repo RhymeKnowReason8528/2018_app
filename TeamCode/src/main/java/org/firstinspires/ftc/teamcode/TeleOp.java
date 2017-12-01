@@ -23,20 +23,20 @@ public class TeleOp extends LinearOpMode {
         //final double GRIPPER_RELIC_CLOSED = 0.89;
         //final double GRIPPER_OPEN = 0.59;
 
-        final double armModify = 0.0006;
-        final double gripperModify = 0.001;
-        final double wristModify = 0.0007;
+        final double armModify = 0.0008;
+        final double gripperModify = 0.008;
+        final double wristModify = 0.001;
 
         //final double ovr_wrist = 0.63;
         //final double und_wrist = 1;
 
-        final double cls_gripper = 0.427;
+      //  final double cls_gripper = 0.427;
         final double opn_gripper = 0;
 
         final double und_arm = 0.2;
         final double ovr_arm = 0.7;
 
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, this);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -44,8 +44,6 @@ public class TeleOp extends LinearOpMode {
         robot.gripperOneServo.setPosition(gripperPos);
         robot.armServo.setPosition(robot.armServo.getPosition());
 
-        robot.leftDrive.setDirection(DcMotor.Direction.REVERSE);
-        robot.rightDrive.setDirection(DcMotor.Direction.FORWARD);
 
         // Wait for the game to start (driver presses PLAY)
 
@@ -77,9 +75,7 @@ public class TeleOp extends LinearOpMode {
             }
 
             if (gamepad2.right_bumper || gamepad2.left_bumper)  {
-                if (gripperPos + gripperModify <= cls_gripper) {
                     gripperPos = robot.gripperOneServo.getPosition() + gripperModify;
-                }
             }
 
             if(gamepad2.right_stick_y < -0.2 && armPos <= ovr_arm) {
@@ -88,11 +84,11 @@ public class TeleOp extends LinearOpMode {
                 armPos -= armModify;
             }
 
-            if (gamepad2.left_stick_y < -0.5) {
-                wristPos -= wristModify;
-            } else if (gamepad2.left_stick_y > 0.5) {
-                wristPos += wristModify;
-            }
+//            if (gamepad2.left_stick_y < -0.5) {
+//                wristPos -= wristModify;
+//            } else if (gamepad2.left_stick_y > 0.5) {
+//                wristPos += wristModify;
+//            }
 
             if (gamepad1.dpad_up) {
                 leftPower = -0.3;
@@ -109,6 +105,9 @@ public class TeleOp extends LinearOpMode {
                 leftPower = -0.7;
                 rightPower = -0.7;
             }
+
+           // wristPos = ((2.5 * armPos) - 0.33);
+            wristPos = ((2 * armPos) - 0.12);
 
             /* Tank Mode uses one stick to control each wheel.
             Right Trigger sets the position of the servo to one that will hold the block

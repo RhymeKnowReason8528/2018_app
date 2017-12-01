@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -7,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="ServoTest")
-
+@Disabled
 public class ServoTest extends LinearOpMode {
 
     // Declare OpMode members.
@@ -23,7 +24,7 @@ public class ServoTest extends LinearOpMode {
         double armPos = 0.6;
         double wristPos = 0.5;
 
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, this);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
