@@ -12,11 +12,8 @@ public class Blue2Auto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-<<<<<<< HEAD
         robot.getVuforiaKey();
-        final String KEY = robot.VuforiaKey;
-=======
->>>>>>> parent of e161015... la singing
+        final String KEY = robot.KEY;
 
         robot.init(hardwareMap, this);
         double currentRunTime = getRuntime();

@@ -13,7 +13,7 @@ public class Blue1Auto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot.getVuforiaKey();
-        final String KEY = robot.VuforiaKey;
+        final String KEY = robot.KEY;
 
         robot.init(hardwareMap, this);
         double currentRunTime = getRuntime();
