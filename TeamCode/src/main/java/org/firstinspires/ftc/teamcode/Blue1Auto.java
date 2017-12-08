@@ -18,18 +18,18 @@ public class Blue1Auto extends LinearOpMode {
 
         waitForStart();
 
-        robot.gripperOneServo.setPosition(0.50);
+        robot.gripper(0.50);
 
         currentRunTime = getRuntime();
         while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {
         }
 
-        robot.wristServo.setPosition(0.62);
+        robot.wrist(0.62);
 
-        robot.driveForward(robot.inchesToTicks(24), -1);
+        robot.autoDrive(robot.inchesToTicks(24), -1);
 
-        robot.gripperOneServo.setPosition(0.20);
-        robot.driveForward(robot.inchesToTicks(3), 1);
+        robot.gripper(0.20);
+        robot.autoDrive(robot.inchesToTicks(3), 1);
 
         while (opModeIsActive()) {
         }

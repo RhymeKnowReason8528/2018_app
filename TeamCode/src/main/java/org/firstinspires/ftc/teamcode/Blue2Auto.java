@@ -18,24 +18,24 @@ public class Blue2Auto extends LinearOpMode {
 
         waitForStart();
 
-        robot.gripperOneServo.setPosition(0.50);
+        robot.gripper(0.50);
 
         currentRunTime = getRuntime();
         while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {
         }
 
-        robot.driveForward(robot.inchesToTicks(24), -1);
-        robot.turn(2100, -1);
-        robot.wristServo.setPosition(0.62);
+        robot.autoDrive(robot.inchesToTicks(24), -1);
+        robot.autoTurn(2100, -1);
+        robot.wrist(0.62);
 
         currentRunTime = getRuntime();
         while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {
         }
 
-        robot.driveForward(robot.inchesToTicks(5), -1);
+        robot.autoDrive(robot.inchesToTicks(5), -1);
 
-        robot.gripperOneServo.setPosition(0.20);
-        robot.driveForward(robot.inchesToTicks(3), 1);
+        robot.gripper(0.20);
+        robot.autoDrive(robot.inchesToTicks(3), 1);
 
         while (opModeIsActive()) {
         }

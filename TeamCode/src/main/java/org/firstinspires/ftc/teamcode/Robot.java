@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -20,6 +19,10 @@ public class Robot {
     public Servo gripperOneServo;
     public Servo wristServo;
 
+    public double gripperOnePosition;
+    public double armServoPosition;
+    public double wristPosition;
+
     private LinearOpMode linearOpMode;
     private boolean initWithOpMode = false;
 
@@ -36,6 +39,20 @@ public class Robot {
         initWithOpMode = true;
     }
 
+    public void arm(double position) {
+        this.armServo.setPosition(position);
+        this.armServoPosition = this.armServo.getPosition();
+    }
+
+    public void wrist(double position) {
+        this.wristServo.setPosition(position);
+        this.wristPosition = this.wristServo.getPosition();
+    }
+
+    public void gripper(double position) {
+        this.gripperOneServo.setPosition(position);
+        this.gripperOnePosition = this.gripperOneServo.getPosition();
+    }
 
     public double inchesToTicks(double inches) {
         double rotation = 1440;
@@ -45,7 +62,7 @@ public class Robot {
         return (go * rotation);
     }
 
-    public void driveForward (double distance, double speed) {
+    public void autoDrive (double distance, double speed) {
         double motorPosition = rightDrive.getCurrentPosition();
         if(speed > 0) {
             while(rightDrive.getCurrentPosition() < distance + motorPosition && linearOpMode.opModeIsActive()) {
@@ -63,7 +80,7 @@ public class Robot {
         rightDrive.setPower(0);
     }
 
-    public void turn (double distance, double speed) {
+    public void autoTurn (double distance, double speed) {
         double motorPosition = rightDrive.getCurrentPosition();
         if(speed > 0) {
             while(rightDrive.getCurrentPosition() < distance + motorPosition && linearOpMode.opModeIsActive()) {
