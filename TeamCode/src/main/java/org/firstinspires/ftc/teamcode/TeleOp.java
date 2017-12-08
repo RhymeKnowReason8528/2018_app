@@ -43,6 +43,7 @@ public class TeleOp extends LinearOpMode {
 
         robot.gripperOneServo.setPosition(block_gripper);
         robot.armServo.setPosition(und_arm);
+        robot.wristServo.setPosition(0.5);
 
         // Wait for the game to start (driver presses PLAY)
 
@@ -51,10 +52,6 @@ public class TeleOp extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            if (getRuntime() >= 120) {
-                break;
-            }
-
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
             double rightPower;
