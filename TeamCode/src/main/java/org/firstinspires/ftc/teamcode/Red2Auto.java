@@ -13,6 +13,8 @@ public class Red2Auto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        robot.getVuforiaKey();
+        final String KEY = robot.VuforiaKey;
 
         robot.init(hardwareMap, this);
         double currentRunTime = getRuntime();
