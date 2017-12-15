@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-/* 144 lines
- * Human-Controlled Operation program v 1.0 */
+/* 124 lines
+ * Human-Controlled Operation program v 1.1 */
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp")
 public class TeleOp extends LinearOpMode {
@@ -26,7 +26,7 @@ public class TeleOp extends LinearOpMode {
         //final double ovr_wrist = 0.63;
         //final double und_wrist = 1;
 
-      //  final double cls_gripper = 0.427;
+        //final double cls_gripper = 0.427;
         final double opn_gripper = 0;
         final double block_gripper = 0.43;
 
@@ -38,8 +38,8 @@ public class TeleOp extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        robot.gripper(robot.gripperOnePosition);
-        robot.arm(robot.armServoPosition);
+        robot.gripper(robot.gripperOneServo.getPosition());
+        robot.arm(robot.armServo.getPosition());
 
         robot.gripperOneServo.setPosition(block_gripper);
         robot.armServo.setPosition(und_arm);
@@ -66,7 +66,7 @@ public class TeleOp extends LinearOpMode {
 
             if(gamepad2.right_trigger > 0.5 || gamepad2.left_trigger > 0.5 && robot.gripperOneServo.getPosition() > 0.16) {
                 if (gripperPos - gripperModify >= opn_gripper) {
-                    gripperPos = robot.gripperOnePosition - gripperModify;
+                    gripperPos = robot.gripperOneServo.getPosition() - gripperModify;
                 }
             }
 

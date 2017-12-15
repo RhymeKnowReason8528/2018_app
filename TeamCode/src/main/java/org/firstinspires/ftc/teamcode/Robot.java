@@ -19,10 +19,6 @@ public class Robot {
     public Servo gripperOneServo;
     public Servo wristServo;
 
-    public double gripperOnePosition;
-    public double armServoPosition;
-    public double wristPosition;
-
     public String KEY = new String();
 
     private LinearOpMode linearOpMode;
@@ -47,17 +43,14 @@ public class Robot {
 
     public void arm(double position) {
         this.armServo.setPosition(position);
-        this.armServoPosition = this.armServo.getPosition();
     }
 
     public void wrist(double position) {
         this.wristServo.setPosition(position);
-        this.wristPosition = this.wristServo.getPosition();
     }
 
     public void gripper(double position) {
         this.gripperOneServo.setPosition(position);
-        this.gripperOnePosition = this.gripperOneServo.getPosition();
     }
 
     public double inchesToTicks(double inches) {
