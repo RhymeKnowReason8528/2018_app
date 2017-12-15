@@ -22,7 +22,6 @@ apply plugin: 'com.android.application'
 android {
 
     compileSdkVersion 23
-    buildToolsVersion '26.0.1'
 
     signingConfigs {
         debug {
@@ -81,6 +80,20 @@ android {
             ndk {
                 abiFilters "armeabi-v7a"
             }
+        }
+    }
+
+    flavorDimensions 'type'
+    productFlavors {
+        openftc { dimension 'type' }
+        stock { dimension 'type' }
+    }
+
+    // Selecting a release variant will prompt teams to set up a signing key. Now that there's
+    // a reason to select other variants, better to filter out the ones that will confuse teams.
+    variantFilter { variant ->
+        if (variant.buildType.name == "release") {
+            setIgnore(true)
         }
     }
 
