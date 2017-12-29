@@ -26,8 +26,6 @@ public class Red1Auto extends LinearOpMode {
         while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {
         }
 
-        robot.wrist(0.62);
-
         robot.autoDrive(robot.inchesToTicks(24), -1);
 
         robot.gripper(0.20);

@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -15,9 +16,8 @@ public class Robot {
     ElapsedTime runtime = new ElapsedTime();
     DcMotor leftDrive = null;
     DcMotor rightDrive = null;
-    public Servo armServo;
     public Servo gripperOneServo;
-    public Servo wristServo;
+    public Servo armServo;
 
     public String KEY = new String();
 
@@ -32,7 +32,6 @@ public class Robot {
 
         armServo = hwmap.servo.get("arm_servo");
         gripperOneServo = hwmap.servo.get("gripper_one_servo");
-        wristServo = hwmap.servo.get("wrist_servo");
         linearOpMode = opMode;
         initWithOpMode = true;
     }
@@ -43,10 +42,6 @@ public class Robot {
 
     public void arm(double position) {
         this.armServo.setPosition(position);
-    }
-
-    public void wrist(double position) {
-        this.wristServo.setPosition(position);
     }
 
     public void gripper(double position) {

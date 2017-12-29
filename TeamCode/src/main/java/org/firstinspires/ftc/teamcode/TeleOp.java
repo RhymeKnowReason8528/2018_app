@@ -11,7 +11,6 @@ public class TeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        double wristPos = 0;
         double armPos = 0.3;
         double gripperPos = 0.234;
 
@@ -43,8 +42,6 @@ public class TeleOp extends LinearOpMode {
 
         robot.gripperOneServo.setPosition(block_gripper);
         robot.armServo.setPosition(und_arm);
-        robot.wristServo.setPosition(0.5);
-
         // Wait for the game to start (driver presses PLAY)
 
         waitForStart();
@@ -95,8 +92,6 @@ public class TeleOp extends LinearOpMode {
                 rightPower = -0.7;
             }
 
-            //wristPos = ((2 * armPos) - 0.12);
-
             /* Tank Mode uses one stick to control each wheel.
             Right Trigger sets the position of the servo to one that will hold the block
             Left Trigger sets the position of the servo to one that will hold the relic
@@ -105,7 +100,6 @@ public class TeleOp extends LinearOpMode {
             // Send calculated power to wheels
             robot.leftDrive.setPower(leftPower);
             robot.rightDrive.setPower(rightPower);
-            robot.wrist(wristPos);
             robot.arm(armPos);
             robot.gripper(gripperPos);
 
@@ -113,7 +107,6 @@ public class TeleOp extends LinearOpMode {
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + robot.runtime.toString());
             telemetry.addData("Gripper", "Position: " + robot.gripperOneServo.getPosition());
-            telemetry.addData("Wrist", "Position: " + robot.wristServo.getPosition());
             telemetry.addData("Arm", "Position: " + robot.armServo.getPosition());
             telemetry.addData("Arm", "armPos: " + armPos);
             telemetry.addData("A button", "Position: " + gamepad1.a);
