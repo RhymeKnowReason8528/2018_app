@@ -16,8 +16,8 @@ public class Robot {
     ElapsedTime runtime = new ElapsedTime();
     DcMotor leftDrive = null;
     DcMotor rightDrive = null;
-    public Servo gripperOneServo;
-    public Servo armServo;
+    public ServoImplEx gripperOneServo;
+    public ServoImplEx armServo;
 
     public String KEY = new String();
 
@@ -30,8 +30,8 @@ public class Robot {
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
 
-        armServo = hwmap.servo.get("arm_servo");
-        gripperOneServo = hwmap.servo.get("gripper_one_servo");
+        armServo = (ServoImplEx) hwmap.servo.get("arm_servo");
+        gripperOneServo = (ServoImplEx) hwmap.servo.get("gripper_one_servo");
         linearOpMode = opMode;
         initWithOpMode = true;
     }
