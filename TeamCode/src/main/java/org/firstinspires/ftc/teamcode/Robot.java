@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -18,11 +18,38 @@ public class Robot {
     DcMotor rightDrive = null;
     public ServoImplEx gripperOneServo;
     public ServoImplEx armServo;
+    // get a reference to our digitalTouch object.
+
+    DigitalChannel touchSensor1;
+    DigitalChannel touchSensor2;
 
     public String KEY = new String();
 
     private LinearOpMode linearOpMode;
     private boolean initWithOpMode = false;
+
+    public GripperState gripperState;
+
+    enum GripperState {
+        OPEN, //OPEN might be used once limit switches are added for the open limit
+        //TODO: Order and add limit switches for the outside and the appropriate code
+        CLOSED,
+        PWMDISABLED,
+        MIDDLE;
+    }
+
+    public void retrieveGripperState() {
+        if (gripperState != GripperState.PWMDISABLED) {
+            if(touchSensor1.getState() == false && touchSensor2.getState() == false) {
+                gripperState = GripperState.CLOSED;
+            } /*else if (!outer limit switch) {
+                gripperState = GripperState.OPEN;
+            } */
+            else {
+                gripperState = GripperState.MIDDLE;
+            }
+        }
+    }
 
     public void init (HardwareMap hwmap, LinearOpMode opMode) {
         leftDrive  = hwmap.dcMotor.get("left_drive");
@@ -32,6 +59,12 @@ public class Robot {
 
         armServo = (ServoImplEx) hwmap.servo.get("arm_servo");
         gripperOneServo = (ServoImplEx) hwmap.servo.get("gripper_one_servo");
+
+        touchSensor1 = hwmap.get(DigitalChannel.class, "touch_sensor_one");
+        touchSensor2 = hwmap.get(DigitalChannel.class, "touch_sensor_two");
+        touchSensor1.setMode(DigitalChannel.Mode.INPUT);
+        touchSensor2.setMode(DigitalChannel.Mode.INPUT);
+
         linearOpMode = opMode;
         initWithOpMode = true;
     }
@@ -91,4 +124,5 @@ public class Robot {
         leftDrive.setPower(0);
         rightDrive.setPower(0);
     }
+
 }

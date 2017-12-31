@@ -2,6 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import static org.firstinspires.ftc.teamcode.Robot.GripperState.CLOSED;
+import static org.firstinspires.ftc.teamcode.Robot.GripperState.MIDDLE;
+import static org.firstinspires.ftc.teamcode.Robot.GripperState.OPEN;
+import static org.firstinspires.ftc.teamcode.Robot.GripperState.PWMDISABLED;
+
 /* 124 lines
  * Human-Controlled Operation program v 1.1 */
 
@@ -20,7 +25,7 @@ public class TeleOp extends LinearOpMode {
         final double ARM_MODIFY = 0.0008;
         final double GRIPPER_MODIFY = 0.001;
 
-        // Setup a variable for each drive wheel to save power level for telemetry
+        // Set up a variable for each drive wheel to save power level for telemetry
         double leftPower;
         double rightPower;
 
@@ -47,6 +52,8 @@ public class TeleOp extends LinearOpMode {
 
             leftPower = gamepad1.left_stick_y;
             rightPower = gamepad1.right_stick_y;
+
+            robot.retrieveGripperState();
 
 //-------------------Wheel control-------------------
 
@@ -77,22 +84,29 @@ public class TeleOp extends LinearOpMode {
 
 //------------------Gripper Control-----------------
 
-            //Open the gripper
-            if (gamepad2.right_bumper && robot.gripperOneServo.getPosition() < 0.586 && robot.gripperOneServo.isPwmEnabled() && gripperPos + GRIPPER_MODIFY <= 1)  {
+            //Close the gripper
+            if (gamepad2.right_bumper && robot.gripperState != CLOSED && robot.gripperState != PWMDISABLED)  {
                 gripperPos = robot.gripperOneServo.getPosition() + GRIPPER_MODIFY;
             }
 
-            //Close the gripper
-            if(gamepad2.right_trigger > 0.5 && robot.gripperOneServo.getPosition() > 0.16 && robot.gripperOneServo.isPwmEnabled() && gripperPos - GRIPPER_MODIFY >= 0) {
+            //Open the gripper
+            if(gamepad2.right_trigger > 0.5 && robot.gripperState != OPEN && robot.gripperState != PWMDISABLED) {
                 gripperPos = robot.gripperOneServo.getPosition() - GRIPPER_MODIFY;
+            }
+
+            //automatically turn off the servo when grabbing a block
+            if(robot.gripperState == MIDDLE) {
+                robot.gripperOneServo.setPwmEnable();
+            } else {
+                robot.gripperOneServo.setPwmDisable();
             }
 
             //Allow the driver to manually turn off the servo (to prevent burning it out during a match)
             if(gamepad2.x) {
-                robot.gripperOneServo.setPwmDisable();
+                robot.gripperState = PWMDISABLED;
             }
             if(gamepad2.y) {
-                robot.gripperOneServo.setPwmEnable();
+                robot.gripperState = MIDDLE;
             }
 
 //-------------------Calculations-------------------
@@ -113,6 +127,9 @@ public class TeleOp extends LinearOpMode {
             telemetry.addData("Gripper", "Position: " + robot.gripperOneServo.getPosition());
             telemetry.addData("Arm", "Position: " + robot.armServo.getPosition());
             telemetry.addData("is pwm enabled: ", robot.gripperOneServo.isPwmEnabled());
+            telemetry.addData("Gripper state: ", robot.gripperState.toString());
+            telemetry.addData("touch sensor 1: ", robot.touchSensor1.getState());
+            telemetry.addData("touch sensor 2", robot.touchSensor2.getState());
             telemetry.update();
         }
     }
