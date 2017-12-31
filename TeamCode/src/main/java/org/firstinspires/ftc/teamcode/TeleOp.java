@@ -11,28 +11,20 @@ public class TeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
+//--------------Declare some variables--------------
+
         double armPos = 0.3;
         double gripperPos = 0.234;
 
-        // Declare OpMode members.
-        //final double GRIPPER_CLOSED = 0.75;
-        //final double GRIPPER_RELIC_CLOSED = 0.89;
-        //final double GRIPPER_OPEN = 0.59;
+        final double ARM_MODIFY = 0.0008;
+        final double GRIPPER_MODIFY = 0.001;
 
-        final double armModify = 0.0008;
-        final double gripperModify = 0.001;
+        // Setup a variable for each drive wheel to save power level for telemetry
+        double leftPower;
+        double rightPower;
 
-        //final double ovr_wrist = 0.63;
-        //final double und_wrist = 1;
-
-        //final double cls_gripper = 0.427;
-        final double opn_gripper = 0;
-        final double block_gripper = 0.43;
-
-        boolean isPwmEnabled = true;
-
-        //final double und_arm = 0.2;
-        //final double ovr_arm = 0.7;
+//--------------Initialize the robot----------------
 
         robot.init(hardwareMap, this);
 
@@ -42,53 +34,30 @@ public class TeleOp extends LinearOpMode {
         robot.gripper(robot.gripperOneServo.getPosition());
         robot.arm(robot.armServo.getPosition());
 
-        robot.gripperOneServo.setPosition(block_gripper);
-        //robot.armServo.setPosition(und_arm);
-        // Wait for the game to start (driver presses PLAY)
+        robot.gripperOneServo.setPwmEnable();
 
-        //robot.gripperOneServo.setPwmEnable();
-        //robot.armServo.setPwmEnable();
+//--------Wait for the driver to press play---------
 
-        waitForStart();
+        waitForStart(); //This is when the driver presses the button
         robot.runtime.reset();
 
-        // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
-            // Setup a variable for each drive wheel to save power level for telemetry
-            double leftPower;
-            double rightPower;
+//------------------Start the loop------------------
 
-            // Choose to drive using either Tank Mode, or POV Mode
-            // Comment out the method that's not used.  The default below is POV.
+        while (opModeIsActive()) {// run until the end of the match (driver presses STOP)
 
-            // POV Mode uses left stick to go forward, and right stick to turn.
-            // - This uses basic math to combine motions and is easier to drive straight.
             leftPower = gamepad1.left_stick_y;
             rightPower = gamepad1.right_stick_y;
 
-            if(gamepad2.right_trigger > 0.5 || gamepad2.left_trigger > 0.5 && robot.gripperOneServo.getPosition() > 0.16 && robot.gripperOneServo.isPwmEnabled()) {
-                if (gripperPos - gripperModify >= opn_gripper) {
-                    gripperPos = robot.gripperOneServo.getPosition() - gripperModify;
-                }
+//-------------------Wheel control-------------------
+
+            //Main joystick drive
+            if(gamepad2.right_stick_y < -0.2) {
+                armPos += ARM_MODIFY;
+            } else if (gamepad2.right_stick_y > 0.2) {
+                armPos -= ARM_MODIFY;
             }
 
-            if (gamepad2.right_bumper || gamepad2.left_bumper && robot.gripperOneServo.getPosition() < 0.586 && robot.gripperOneServo.isPwmEnabled())  {
-                    gripperPos = robot.gripperOneServo.getPosition() + gripperModify;
-            }
-
-            if(gamepad2.right_stick_y < -0.2 /*&& armPos <= ovr_arm*/) {
-                armPos += armModify;
-            } else if (gamepad2.right_stick_y > 0.2 /*&& armPos >= und_arm*/) {
-                armPos -= armModify;
-            }
-            if(gamepad1.dpad_up) {
-                leftPower = -0.3;
-                rightPower = -0.3;
-            } else if (gamepad1.dpad_down) {
-                leftPower = 0.3;
-                rightPower = 0.3;
-            }
-
+            //Drive for 3/4 power
             if (gamepad1.a) {
                 leftPower = 0.7;
                 rightPower = 0.7;
@@ -97,6 +66,28 @@ public class TeleOp extends LinearOpMode {
                 rightPower = -0.7;
             }
 
+            //Drive for 1/3 power
+            if(gamepad1.dpad_up) {
+                leftPower = -0.3;
+                rightPower = -0.3;
+            } else if (gamepad1.dpad_down) {
+                leftPower = 0.3;
+                rightPower = 0.3;
+            }
+
+//------------------Gripper Control-----------------
+
+            //Open the gripper
+            if (gamepad2.right_bumper && robot.gripperOneServo.getPosition() < 0.586 && robot.gripperOneServo.isPwmEnabled() && gripperPos + GRIPPER_MODIFY <= 1)  {
+                gripperPos = robot.gripperOneServo.getPosition() + GRIPPER_MODIFY;
+            }
+
+            //Close the gripper
+            if(gamepad2.right_trigger > 0.5 && robot.gripperOneServo.getPosition() > 0.16 && robot.gripperOneServo.isPwmEnabled() && gripperPos - GRIPPER_MODIFY >= 0) {
+                gripperPos = robot.gripperOneServo.getPosition() - GRIPPER_MODIFY;
+            }
+
+            //Allow the driver to manually turn off the servo (to prevent burning it out during a match)
             if(gamepad2.x) {
                 robot.gripperOneServo.setPwmDisable();
             }
@@ -104,10 +95,7 @@ public class TeleOp extends LinearOpMode {
                 robot.gripperOneServo.setPwmEnable();
             }
 
-            /* Tank Mode uses one stick to control each wheel.
-            Right Trigger sets the position of the servo to one that will hold the block
-            Left Trigger sets the position of the servo to one that will hold the relic
-             - This requires no math, but it is hard to drive forward slowly and keep straight*/
+//-------------------Calculations-------------------
 
             // Send calculated power to wheels and servos
             robot.leftDrive.setPower(leftPower);
@@ -118,12 +106,12 @@ public class TeleOp extends LinearOpMode {
                 robot.gripper(gripperPos);
             }
 
+//------------------Telemetry-----------------
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + robot.runtime.toString());
             telemetry.addData("Gripper", "Position: " + robot.gripperOneServo.getPosition());
             telemetry.addData("Arm", "Position: " + robot.armServo.getPosition());
-            telemetry.addData("Arm", "armPos: " + armPos);
             telemetry.addData("is pwm enabled: ", robot.gripperOneServo.isPwmEnabled());
             telemetry.update();
         }
