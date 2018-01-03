@@ -1,4 +1,9 @@
 package org.firstinspires.ftc.teamcode;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -19,10 +24,16 @@ public class Robot {
     public Servo gripperOneServo;
     public Servo wristServo;
 
-    public String KEY = new String();
+    private RelicRecoveryVuMark vuMark;
+    public boolean isVisibleVuMark;
+    public static final String VUFORIA_KEY = "AdS8N7v/////AAAAGeY4UIl2TERklrM+PcYE7C6F9ws43EXwdhy7nPs+KOA3OpkI+AiM+uVBOIQaPH7mBZ514vuoQLUxUf+IVn42BJ+Fy1esAxeT7H2JPZ8FaVjf8agAwpY6/gs4UbNOpkeRvL/4hFp3zcDU6iOgUT1d/IlfMDc8rYvP9L6Iz9HzjaUU/dlWI8SDGCEwEl5OetdHMn+vXXrA5wRdI9PwtoR6EeOKJRXeHuZo+k2HsjoxGMgxb6U7LFYaJTIdv8MoHppxvQMbvpiYPPHO0jAf4Mj6As0Vtvud7gkjEPHE5NU1yaAEbOqjKWlaRY/GSn2kK/Gp8OB0NLYxci1FzvtI8QDcPqcmEbJhrEr2NCOs+l8fuQND";
+    private VuforiaLocalizer vuforia;
 
     private LinearOpMode linearOpMode;
     private boolean initWithOpMode = false;
+
+    public VuforiaTrackable relicTemplate;
+    public VuforiaTrackables relicTrackables;
 
     public void init (HardwareMap hwmap, LinearOpMode opMode) {
         leftDrive  = hwmap.dcMotor.get("left_drive");
@@ -35,10 +46,21 @@ public class Robot {
         wristServo = hwmap.servo.get("wrist_servo");
         linearOpMode = opMode;
         initWithOpMode = true;
+
+        this.vuforiaInit(hwmap);
     }
 
-    public void getVuforiaKey() {
-        this.KEY = "AdS8N7v/////AAAAGeY4UIl2TERklrM+PcYE7C6F9ws43EXwdhy7nPs+KOA3OpkI+AiM+uVBOIQaPH7mBZ514vuoQLUxUf+IVn42BJ+Fy1esAxeT7H2JPZ8FaVjf8agAwpY6/gs4UbNOpkeRvL/4hFp3zcDU6iOgUT1d/IlfMDc8rYvP9L6Iz9HzjaUU/dlWI8SDGCEwEl5OetdHMn+vXXrA5wRdI9PwtoR6EeOKJRXeHuZo+k2HsjoxGMgxb6U7LFYaJTIdv8MoHppxvQMbvpiYPPHO0jAf4Mj6As0Vtvud7gkjEPHE5NU1yaAEbOqjKWlaRY/GSn2kK/Gp8OB0NLYxci1FzvtI8QDcPqcmEbJhrEr2NCOs+l8fuQND";
+    public void vuforiaInit (HardwareMap hardwareMap) {
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
+
+        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+
+        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
+        VuforiaTrackable relicTemplate = relicTrackables.get(0);
     }
 
     public void arm(double position) {
@@ -67,12 +89,22 @@ public class Robot {
             while(rightDrive.getCurrentPosition() < distance + motorPosition && linearOpMode.opModeIsActive()) {
                 leftDrive.setPower(speed);
                 rightDrive.setPower(speed);
+                vuMark = RelicRecoveryVuMark.from(relicTemplate);
+                this.isVisibleVuMark = false;
+                if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+                    this.isVisibleVuMark = true;
+                }
             }
         }
         if(speed < 0) {
             while(rightDrive.getCurrentPosition() > (-distance) + motorPosition && linearOpMode.opModeIsActive()) {
                 leftDrive.setPower(speed);
                 rightDrive.setPower(speed);
+                vuMark = RelicRecoveryVuMark.from(relicTemplate);
+                this.isVisibleVuMark = false;
+                if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+                    this.isVisibleVuMark = true;
+                }
             }
         }
         leftDrive.setPower(0);
@@ -95,5 +127,9 @@ public class Robot {
         }
         leftDrive.setPower(0);
         rightDrive.setPower(0);
+    }
+
+    public RelicRecoveryVuMark getVuMark() {
+        return vuMark;
     }
 }
