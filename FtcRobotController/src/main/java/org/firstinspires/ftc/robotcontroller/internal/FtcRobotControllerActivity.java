@@ -606,7 +606,7 @@ public class FtcRobotControllerActivity extends Activity {
 
         HardwareFactory factory;
         RobotConfigFile file = cfgFileMgr.getActiveConfigAndUpdateUI();
-        HardwareFactory hardwareFactory = new HardwareFactory(context);
+        HardwareFactory hardwareFactory = new HardwareFactory(this);
         try {
             hardwareFactory.setXmlPullParser(file.getXml());
         } catch (Resources.NotFoundException e) {
