@@ -42,7 +42,7 @@ public class Robot {
 
     protected ServoControllerEx controllerEx;
     final double GRIPPER_MODIFY = 0.001;
-    public final int GRIPPER_PORT_NUMBER = gripperOneServo.getPortNumber();
+    private final int GRIPPER_PORT_NUMBER = gripperOneServo.getPortNumber();
 
     public GripperState getGripperState() {
 
