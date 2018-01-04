@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.ServoControllerEx;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -39,7 +40,9 @@ public class Robot {
         MIDDLE
     }
 
+    protected ServoControllerEx controllerEx;
     final double GRIPPER_MODIFY = 0.001;
+    public final int GRIPPER_PORT_NUMBER = gripperOneServo.getPortNumber();
 
     public GripperState getGripperState() {
 
@@ -64,8 +67,8 @@ public class Robot {
         }
     }
 
-    public ServoImplEx getGripperOneServo() {
-        return gripperOneServo;
+    public void gripperServoPwmDisable() {
+        controllerEx.setServoPwmDisable(GRIPPER_PORT_NUMBER);
     }
 
     public void disableGripper() {
