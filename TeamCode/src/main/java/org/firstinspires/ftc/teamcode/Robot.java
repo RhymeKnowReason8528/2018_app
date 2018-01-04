@@ -7,6 +7,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import static org.firstinspires.ftc.teamcode.Robot.GripperState.CLOSED;
+import static org.firstinspires.ftc.teamcode.Robot.GripperState.MAX_OPEN;
+
 /**
  * Created by trucc on 10/27/2017.
  */
@@ -16,7 +19,7 @@ public class Robot {
     ElapsedTime runtime = new ElapsedTime();
     DcMotor leftDrive = null;
     DcMotor rightDrive = null;
-    public ServoImplEx gripperOneServo;
+    private ServoImplEx gripperOneServo;
     public ServoImplEx armServo;
     // get a reference to our digitalTouch object.
 
@@ -27,30 +30,55 @@ public class Robot {
 
     private LinearOpMode linearOpMode;
     private boolean initWithOpMode = false;
-
-    public GripperState gripperState;
+    private boolean isGripperDisabled = false;
 
     enum GripperState {
-        OPEN, //OPEN might be used once limit switches are added for the open limit
+        MAX_OPEN, //MAX_OPEN might be used once limit switches are added for the open limit
         //TODO: Order and add limit switches for the outside and the appropriate code
         CLOSED,
-        PWMDISABLED,
-        MIDDLE;
+        MIDDLE
     }
 
-    public void retrieveGripperState() {
-        if (gripperState != GripperState.PWMDISABLED) {
-            if(touchSensor1.getState() == false && touchSensor2.getState() == false) {
-                gripperState = GripperState.CLOSED;
-            } /*else if (!outer limit switch) {
-                gripperState = GripperState.OPEN;
-            } */
-            else {
-                gripperState = GripperState.MIDDLE;
-            }
+    final double GRIPPER_MODIFY = 0.001;
+
+    public GripperState getGripperState() {
+
+        if (touchSensor1.getState() == false && touchSensor2.getState() == false) {
+             return GripperState.CLOSED;
+        } /*else if (!outer limit switch) {
+                gripperState = GripperState.MAX_OPEN;
+            } */ else {
+            return GripperState.MIDDLE;
         }
     }
 
+    public void moveGripperOpen() {
+        if(getGripperState() != MAX_OPEN && !isGripperDisabled) {
+            gripperOneServo.setPosition(gripperOneServo.getPosition() - GRIPPER_MODIFY);
+        }
+    }
+
+    public void moveGripperClosed() {
+        if (getGripperState() != CLOSED && !isGripperDisabled)  {
+            gripperOneServo.setPosition(gripperOneServo.getPosition() + GRIPPER_MODIFY);
+        }
+    }
+
+    public ServoImplEx getGripperOneServo() {
+        return gripperOneServo;
+    }
+
+    public void disableGripper() {
+        isGripperDisabled = true;
+    }
+
+    public void enableGripper() {
+        isGripperDisabled = false;
+    }
+
+    public boolean isGripperDisabled() {
+        return isGripperDisabled;
+    }
     public void init (HardwareMap hwmap, LinearOpMode opMode) {
         leftDrive  = hwmap.dcMotor.get("left_drive");
         rightDrive = hwmap.dcMotor.get("right_drive");
@@ -77,7 +105,7 @@ public class Robot {
         this.armServo.setPosition(position);
     }
 
-    public void gripper(double position) {
+    public void setGripperPosition(double position) {
         this.gripperOneServo.setPosition(position);
     }
 
