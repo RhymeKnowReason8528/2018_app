@@ -89,7 +89,7 @@ public class TeleOp extends LinearOpMode {
                     robot.getGripperOneServo().setPwmDisable();
                 }
             } else {
-                robot.getGripperOneServo().setPwmDisable();
+                robot.gripperServoPwmDisable();
             }
 
             //Allow the driver to manually turn off the servo (to prevent burning it out during a match)
