@@ -32,10 +32,10 @@ public class ServoTest extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             if (gamepad1.right_bumper) {
-                gripperPos += 0.01;
+                robot.moveGripperOpen();
             }
             else if(gamepad1.left_bumper) {
-                gripperPos -= 0.01;
+                robot.moveGripperClosed();
             }
 
             if (gamepad1.a){
@@ -47,13 +47,10 @@ public class ServoTest extends LinearOpMode {
                 armPos += 0;
             }
 
-
-            robot.gripperOneServo.setPosition(gripperPos);
             robot.armServo.setPosition(armPos);
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("ArmPos", "Arm Position: " + robot.armServo.getPosition());
-            telemetry.addData("GripperPos", "Gripper Position: " + robot.gripperOneServo.getPosition());
             telemetry.update();
         }
     }
