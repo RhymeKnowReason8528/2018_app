@@ -23,7 +23,7 @@ public class TeleOp extends LinearOpMode {
 
         double armPos = 0.3;
 
-        final double ARM_MODIFY = 0.0008;
+        final double ARM_MODIFY = 0.002;
 
 //--------------Initialize the robot----------------
 
