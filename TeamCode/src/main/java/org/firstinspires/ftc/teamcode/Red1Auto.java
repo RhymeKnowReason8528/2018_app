@@ -24,6 +24,7 @@ public class Red1Auto extends LinearOpMode {
         while(robot.getGripperState() != Robot.GripperState.CLOSED) {
             robot.moveGripperClosed();
         }
+        robot.gripperServoPwmDisable();
 
         currentRunTime = getRuntime();
         while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {
