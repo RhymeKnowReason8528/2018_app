@@ -33,6 +33,9 @@ public class Robot {
     private boolean initWithOpMode = false;
     private boolean isGripperDisabled = false;
 
+    private final double GRIPPER_OPEN_LIMIT = 0.52;
+    private final double GRIPPER_CLOSED_LIMIT = 0.69;
+
     enum GripperState {
         MAX_OPEN, //MAX_OPEN might be used once limit switches are added for the open limit
         //TODO: Order and add limit switches for the outside and the appropriate code
@@ -55,26 +58,26 @@ public class Robot {
     }
 
     public void moveGripperOpen() {
-        if(getGripperState() != MAX_OPEN && !isGripperDisabled) {
+        if(getGripperState() != MAX_OPEN && !isGripperDisabled && (gripperOneServo.getPosition() - GRIPPER_MODIFY) >= GRIPPER_OPEN_LIMIT) {
             gripperOneServo.setPosition(gripperOneServo.getPosition() - GRIPPER_MODIFY);
         }
     }
 
     public void moveGripperClosed() {
-        if (getGripperState() != CLOSED && !isGripperDisabled)  {
+        if (getGripperState() != CLOSED && !isGripperDisabled && (gripperOneServo.getPosition() + GRIPPER_MODIFY) <= GRIPPER_CLOSED_LIMIT)  {
             gripperOneServo.setPosition(gripperOneServo.getPosition() + GRIPPER_MODIFY);
         }
     }
 
     public void moveGripperFullClosed() {
-        while(getGripperState() != Robot.GripperState.CLOSED) {
+        while(getGripperState() != Robot.GripperState.CLOSED && gripperOneServo.getPosition() + GRIPPER_MODIFY < GRIPPER_CLOSED_LIMIT) {
             moveGripperClosed();
         }
         gripperServoPwmDisable();
     }
 
     public void moveGripperFullOpen() {
-        while(getGripperState() != GripperState.MAX_OPEN) {
+        while(getGripperState() != GripperState.MAX_OPEN && gripperOneServo.getPosition() - GRIPPER_MODIFY > GRIPPER_OPEN_LIMIT) {
             moveGripperClosed();
         }
         gripperServoPwmDisable();
