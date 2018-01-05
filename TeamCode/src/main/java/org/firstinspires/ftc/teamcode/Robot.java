@@ -41,8 +41,7 @@ public class Robot {
     }
 
     protected ServoControllerEx controllerEx;
-    final double GRIPPER_MODIFY = 0.001;
-    private final int GRIPPER_PORT_NUMBER = gripperOneServo.getPortNumber();
+    final double GRIPPER_MODIFY = 0.01;
 
     public GripperState getGripperState() {
 
@@ -68,7 +67,7 @@ public class Robot {
     }
 
     public void gripperServoPwmDisable() {
-        controllerEx.setServoPwmDisable(GRIPPER_PORT_NUMBER);
+        gripperOneServo.setPwmDisable();
     }
 
     public void disableGripper() {
@@ -98,6 +97,9 @@ public class Robot {
 
         linearOpMode = opMode;
         initWithOpMode = true;
+
+        gripperOneServo.setPwmEnable();
+        gripperOneServo.setPosition(0.52);
     }
 
     public void getVuforiaKey() {
