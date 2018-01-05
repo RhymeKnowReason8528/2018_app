@@ -41,7 +41,7 @@ public class Robot {
     }
 
     protected ServoControllerEx controllerEx;
-    final double GRIPPER_MODIFY = 0.01;
+    final double GRIPPER_MODIFY = 0.004;
 
     public GripperState getGripperState() {
 
