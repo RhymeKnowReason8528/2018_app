@@ -48,8 +48,6 @@ public class TeleOp extends LinearOpMode {
             leftPower = gamepad1.left_stick_y;
             rightPower = gamepad1.right_stick_y;
 
-            robot.getGripperState();
-
 //-------------------Wheel control-------------------
 
             //Main joystick drive
