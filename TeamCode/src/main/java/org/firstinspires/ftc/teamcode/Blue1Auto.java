@@ -21,10 +21,7 @@ public class Blue1Auto extends LinearOpMode {
         waitForStart();
 
         //robot.gripper(0.50);
-        while(robot.getGripperState() != Robot.GripperState.CLOSED) {
-            robot.moveGripperClosed();
-        }
-        robot.gripperServoPwmDisable();
+        robot.moveGripperFullClosed();
 
         currentRunTime = getRuntime();
         while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {

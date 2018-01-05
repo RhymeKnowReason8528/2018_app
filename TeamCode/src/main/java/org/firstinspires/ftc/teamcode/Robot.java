@@ -66,6 +66,20 @@ public class Robot {
         }
     }
 
+    public void moveGripperFullClosed() {
+        while(getGripperState() != Robot.GripperState.CLOSED) {
+            moveGripperClosed();
+        }
+        gripperServoPwmDisable();
+    }
+
+    public void moveGripperFullOpen() {
+        while(getGripperState() != GripperState.MAX_OPEN) {
+            moveGripperClosed();
+        }
+        gripperServoPwmDisable();
+    }
+
     public void gripperServoPwmDisable() {
         gripperOneServo.setPwmDisable();
     }
