@@ -80,13 +80,15 @@ public class TeleOp extends LinearOpMode {
 //------------------Gripper Control-----------------
 
             if (robot.isGripperDisabled() == false) {
-                //Move the gripper
-                if (gamepad2.right_bumper)  {
-                    robot.moveGripperClosed();
-                } else if (gamepad2.right_trigger > 0.5) {
-                    robot.moveGripperOpen();
-                } else if (robot.getGripperState() != MIDDLE) {
+                if (robot.getGripperState() != MIDDLE) {
                     robot.gripperServoPwmDisable();
+                } else {
+                    //Move the gripper
+                    if (gamepad2.right_bumper)  {
+                        robot.moveGripperClosed();
+                    } else if (gamepad2.right_trigger > 0.5) {
+                        robot.moveGripperOpen();
+                    }
                 }
             } else {
                 robot.gripperServoPwmDisable();
