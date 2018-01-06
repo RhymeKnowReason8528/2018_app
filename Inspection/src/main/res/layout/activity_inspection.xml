@@ -413,7 +413,6 @@
 
             </LinearLayout>
 
-
             <TextView
                 android:id="@+id/textOpenFTCWarning"
                 android:layout_width="match_parent"
