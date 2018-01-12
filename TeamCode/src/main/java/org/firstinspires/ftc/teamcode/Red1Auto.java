@@ -17,6 +17,8 @@ public class Red1Auto extends LinearOpMode {
 
         robot.init(hardwareMap, this);
         double currentRunTime = getRuntime();
+        robot.enableGripper();
+        robot.moveGripperFullClosed();
 
         waitForStart();
 
@@ -27,12 +29,10 @@ public class Red1Auto extends LinearOpMode {
         while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {
         }
 
-        robot.autoDrive(robot.inchesToTicks(24), -1);
+        robot.autoDrive(robot.inchesToTicks(30), -1);
 
        // robot.gripper(0.20);
         robot.autoDrive(robot.inchesToTicks(3), 1);
 
-        while (opModeIsActive()) {
-        }
     }
 }
