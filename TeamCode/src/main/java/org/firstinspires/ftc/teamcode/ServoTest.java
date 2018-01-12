@@ -22,7 +22,6 @@ public class ServoTest extends LinearOpMode {
         Robot robot = new Robot();
         double gripperPos = 0.7;
         double armPos = 0.6;
-        double wristPos = 0.5;
 
         robot.init(hardwareMap, this);
 
@@ -48,19 +47,11 @@ public class ServoTest extends LinearOpMode {
                 armPos += 0;
             }
 
-          /*  if(gamepad1.x) {
-                wristPos += 0.01;
-            }
-            else if(gamepad1.y) {
-                wristPos -= 0.01;
-            }*/
 
             robot.gripperOneServo.setPosition(gripperPos);
             robot.armServo.setPosition(armPos);
-            robot.wristServo.setPosition(-armPos - 0.63);
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("WristPos", "Wrist Position: " + robot.wristServo.getPosition());
             telemetry.addData("ArmPos", "Arm Position: " + robot.armServo.getPosition());
             telemetry.addData("GripperPos", "Gripper Position: " + robot.gripperOneServo.getPosition());
             telemetry.update();

@@ -23,12 +23,13 @@ public class Blue1Auto extends LinearOpMode {
         robot.relicTrackables.activate();
 
         while (opModeIsActive()) {
-            robot.wrist(0.62);
+
 
             robot.autoDrive(robot.inchesToTicks(24), -1);
 
             robot.gripper(0.20);
             robot.autoDrive(robot.inchesToTicks(3), 1);
+        robot.autoDrive(robot.inchesToTicks(24), -1);
 
             RelicRecoveryVuMark VuMark = robot.getVuMark();
 
@@ -39,10 +40,7 @@ public class Blue1Auto extends LinearOpMode {
             }
 
             currentRunTime = getRuntime();
-            while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {
-            }
-
-            robot.wrist(0.62);
+            while(getRuntime() < 1 + currentRunTime && opModeIsActive())
 
             robot.autoDrive(robot.inchesToTicks(24), -1);
 

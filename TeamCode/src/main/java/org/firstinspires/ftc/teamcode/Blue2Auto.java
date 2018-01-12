@@ -26,7 +26,6 @@ public class Blue2Auto extends LinearOpMode {
 
         robot.autoDrive(robot.inchesToTicks(24), -1);
         robot.autoTurn(2100, -1);
-        robot.wrist(0.62);
 
         currentRunTime = getRuntime();
         while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {
