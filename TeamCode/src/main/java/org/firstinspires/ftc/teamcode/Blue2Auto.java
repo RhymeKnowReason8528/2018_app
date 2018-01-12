@@ -34,8 +34,8 @@ public class Blue2Auto extends LinearOpMode {
 
         robot.autoDrive(robot.inchesToTicks(5), -1);
 
-       // robot.gripper(0.20);
-//
+        robot.autoOpen();
+
         robot.autoDrive(robot.inchesToTicks(3), 1);
 
         while (opModeIsActive()) {
