@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 /* 34 lines
  * Autonomous v 1.0 */
@@ -13,8 +12,6 @@ public class Red2Auto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot.getVuforiaKey();
-        final String KEY = robot.KEY;
 
         robot.init(hardwareMap, this);
         double currentRunTime = getRuntime();
@@ -23,7 +20,6 @@ public class Red2Auto extends LinearOpMode {
 
         waitForStart();
 
-//        robot.gripper(0.50);
         robot.moveGripperFullClosed();
 
         currentRunTime = getRuntime();
@@ -38,7 +34,8 @@ public class Red2Auto extends LinearOpMode {
 
         robot.autoDrive(robot.inchesToTicks(10), -1);
 
-  //      robot.gripper(0.20);
+        robot.autoOpen();
+
         robot.autoDrive(robot.inchesToTicks(3), 1);
 
     }

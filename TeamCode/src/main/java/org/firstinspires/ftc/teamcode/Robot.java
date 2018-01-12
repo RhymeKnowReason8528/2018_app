@@ -83,6 +83,10 @@ public class Robot {
         gripperServoPwmDisable();
     }
 
+    public void autoOpen() {
+        gripperOneServo.setPosition(0.56);
+    }
+
     public void gripperServoPwmDisable() {
         gripperOneServo.setPwmDisable();
     }

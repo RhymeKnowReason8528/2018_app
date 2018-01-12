@@ -22,7 +22,6 @@ public class Blue1Auto extends LinearOpMode {
 
         waitForStart();
 
-        //robot.gripper(0.50);
         robot.moveGripperFullClosed();
 
         currentRunTime = getRuntime();
@@ -31,8 +30,7 @@ public class Blue1Auto extends LinearOpMode {
 
         robot.autoDrive(robot.inchesToTicks(30), -1);
 
-        //robot.gripper(0.20);
-//
+        robot.autoOpen();
         robot.autoDrive(robot.inchesToTicks(3), 1);
 
     }

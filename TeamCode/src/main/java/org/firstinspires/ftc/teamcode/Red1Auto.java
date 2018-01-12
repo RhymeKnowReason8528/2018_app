@@ -12,8 +12,6 @@ public class Red1Auto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot.getVuforiaKey();
-        final String KEY = robot.KEY;
 
         robot.init(hardwareMap, this);
         double currentRunTime = getRuntime();
@@ -22,7 +20,6 @@ public class Red1Auto extends LinearOpMode {
 
         waitForStart();
 
-       // robot.gripper(0.50);
         robot.moveGripperFullClosed();
 
         currentRunTime = getRuntime();
@@ -31,7 +28,8 @@ public class Red1Auto extends LinearOpMode {
 
         robot.autoDrive(robot.inchesToTicks(30), -1);
 
-       // robot.gripper(0.20);
+        robot.autoOpen();
+
         robot.autoDrive(robot.inchesToTicks(3), 1);
 
     }
