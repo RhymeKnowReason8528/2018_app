@@ -20,8 +20,9 @@ public class Robot {
     ElapsedTime runtime = new ElapsedTime();
     DcMotor leftDrive = null;
     DcMotor rightDrive = null;
-    private ServoImplEx gripperOneServo;
+    public ServoImplEx gripperOneServo;
     public ServoImplEx armServo;
+
     // get a reference to our digitalTouch object.
 
     DigitalChannel touchSensor1;
@@ -69,7 +70,7 @@ public class Robot {
     }
 
     public void moveGripperFullClosed() {
-        while(getGripperState() != Robot.GripperState.CLOSED && gripperOneServo.getPosition() + GRIPPER_MODIFY < GRIPPER_CLOSED_LIMIT) {
+        while(getGripperState() != CLOSED) {
             moveGripperClosed();
         }
         gripperServoPwmDisable();
@@ -114,7 +115,6 @@ public class Robot {
         linearOpMode = opMode;
         initWithOpMode = true;
 
-        gripperOneServo.setPwmEnable();
         gripperOneServo.setPosition(0.52);
     }
 

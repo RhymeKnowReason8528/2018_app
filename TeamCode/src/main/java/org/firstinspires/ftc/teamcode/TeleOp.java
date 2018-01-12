@@ -114,6 +114,7 @@ public class TeleOp extends LinearOpMode {
             telemetry.addData("touch sensor 1: ", robot.touchSensor1.getState());
             telemetry.addData("touch sensor 2", robot.touchSensor2.getState());
             telemetry.addData("is gripper disabled", robot.isGripperDisabled());
+            telemetry.addData("gripper Position", robot.gripperOneServo.getPosition());
             telemetry.update();
         }
     }
