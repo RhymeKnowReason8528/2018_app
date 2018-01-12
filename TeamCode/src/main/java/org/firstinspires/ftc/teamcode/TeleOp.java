@@ -4,9 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import static org.firstinspires.ftc.teamcode.Robot.GripperState.CLOSED;
 import static org.firstinspires.ftc.teamcode.Robot.GripperState.MIDDLE;
-import static org.firstinspires.ftc.teamcode.Robot.GripperState.OPEN;
-import static org.firstinspires.ftc.teamcode.Robot.GripperState.PWMDISABLED;
-
+import static org.firstinspires.ftc.teamcode.Robot.GripperState.MAX_OPEN;
 /* 124 lines
  * Human-Controlled Operation program v 1.1 */
 
@@ -19,15 +17,13 @@ public class TeleOp extends LinearOpMode {
 
 //--------------Declare some variables--------------
 
-        double armPos = 0.3;
-        double gripperPos = 0.234;
-
-        final double ARM_MODIFY = 0.0008;
-        final double GRIPPER_MODIFY = 0.001;
-
         // Set up a variable for each drive wheel to save power level for telemetry
         double leftPower;
         double rightPower;
+
+        double armPos = 0.3;
+
+        final double ARM_MODIFY = 0.002;
 
 //--------------Initialize the robot----------------
 
@@ -36,10 +32,9 @@ public class TeleOp extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        robot.gripper(robot.gripperOneServo.getPosition());
         robot.arm(robot.armServo.getPosition());
 
-        robot.gripperOneServo.setPwmEnable();
+        robot.enableGripper();
 
 //--------Wait for the driver to press play---------
 
@@ -52,8 +47,6 @@ public class TeleOp extends LinearOpMode {
 
             leftPower = gamepad1.left_stick_y;
             rightPower = gamepad1.right_stick_y;
-
-            robot.retrieveGripperState();
 
 //-------------------Wheel control-------------------
 
@@ -84,29 +77,26 @@ public class TeleOp extends LinearOpMode {
 
 //------------------Gripper Control-----------------
 
-            //Close the gripper
-            if (gamepad2.right_bumper && robot.gripperState != CLOSED && robot.gripperState != PWMDISABLED)  {
-                gripperPos = robot.gripperOneServo.getPosition() + GRIPPER_MODIFY;
-            }
+            if (robot.isGripperDisabled() == false) {
+                if (robot.getGripperState() != MIDDLE) {
+                    robot.gripperServoPwmDisable();
+                }
+                if (gamepad2.right_bumper)  {
+                    robot.moveGripperClosed();
+                } else if (gamepad2.right_trigger > 0.5) {
+                    robot.moveGripperOpen();
+                }
 
-            //Open the gripper
-            if(gamepad2.right_trigger > 0.5 && robot.gripperState != OPEN && robot.gripperState != PWMDISABLED) {
-                gripperPos = robot.gripperOneServo.getPosition() - GRIPPER_MODIFY;
-            }
-
-            //automatically turn off the servo when grabbing a block
-            if(robot.gripperState == MIDDLE) {
-                robot.gripperOneServo.setPwmEnable();
             } else {
-                robot.gripperOneServo.setPwmDisable();
+                robot.gripperServoPwmDisable();
             }
 
             //Allow the driver to manually turn off the servo (to prevent burning it out during a match)
             if(gamepad2.x) {
-                robot.gripperState = PWMDISABLED;
+                robot.disableGripper();
             }
             if(gamepad2.y) {
-                robot.gripperState = MIDDLE;
+                robot.enableGripper();
             }
 
 //-------------------Calculations-------------------
@@ -116,20 +106,14 @@ public class TeleOp extends LinearOpMode {
             robot.rightDrive.setPower(rightPower);
             robot.arm(armPos);
 
-            if(robot.gripperOneServo.isPwmEnabled()) {
-                robot.gripper(gripperPos);
-            }
-
 //------------------Telemetry-----------------
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + robot.runtime.toString());
-            telemetry.addData("Gripper", "Position: " + robot.gripperOneServo.getPosition());
-            telemetry.addData("Arm", "Position: " + robot.armServo.getPosition());
-            telemetry.addData("is pwm enabled: ", robot.gripperOneServo.isPwmEnabled());
-            telemetry.addData("Gripper state: ", robot.gripperState.toString());
+            telemetry.addData("Gripper state: ", robot.getGripperState().toString());
             telemetry.addData("touch sensor 1: ", robot.touchSensor1.getState());
             telemetry.addData("touch sensor 2", robot.touchSensor2.getState());
+            telemetry.addData("is gripper disabled", robot.isGripperDisabled());
             telemetry.update();
         }
     }

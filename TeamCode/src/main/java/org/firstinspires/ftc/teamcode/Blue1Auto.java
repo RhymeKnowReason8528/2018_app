@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-
 /* 34 lines
  * Autonomous v 1.0 */
 
@@ -14,40 +12,28 @@ public class Blue1Auto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        robot.getVuforiaKey();
+        final String KEY = robot.KEY;
 
         robot.init(hardwareMap, this);
         double currentRunTime = getRuntime();
 
         waitForStart();
 
-        robot.relicTrackables.activate();
+        //robot.gripper(0.50);
+        robot.moveGripperFullClosed();
 
-        while (opModeIsActive()) {
+        currentRunTime = getRuntime();
+        while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {
+        }
 
-
-            robot.autoDrive(robot.inchesToTicks(24), -1);
-
-            robot.gripper(0.20);
-            robot.autoDrive(robot.inchesToTicks(3), 1);
         robot.autoDrive(robot.inchesToTicks(24), -1);
 
-            RelicRecoveryVuMark VuMark = robot.getVuMark();
+        //robot.gripper(0.20);
+//
+        robot.autoDrive(robot.inchesToTicks(3), 1);
 
-            VuMark = RelicRecoveryVuMark.from(robot.relicTemplate);
-            if (VuMark != RelicRecoveryVuMark.UNKNOWN) {
-                robot.isVisibleVuMark = true;
-                telemetry.addData("VuMark", "%s visible", VuMark);
-            }
-
-            currentRunTime = getRuntime();
-            while(getRuntime() < 1 + currentRunTime && opModeIsActive())
-
-            robot.autoDrive(robot.inchesToTicks(24), -1);
-
-            robot.gripper(0.20);
-            robot.autoDrive(robot.inchesToTicks(3), 1);
-
-            telemetry.update();
+        while (opModeIsActive()) {
         }
     }
 }
