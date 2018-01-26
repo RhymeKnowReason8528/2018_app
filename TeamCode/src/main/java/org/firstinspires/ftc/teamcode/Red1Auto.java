@@ -10,12 +10,21 @@ public class Red1Auto extends LinearOpMode {
 
     private Robot robot = new Robot();
 
+    private int red;
+    private int blue;
+
     @Override
     public void runOpMode() throws InterruptedException {
 
         robot.init(hardwareMap, this);
         double currentRunTime = getRuntime();
         robot.enableGripper();
+
+        blue = robot.getBlue(1);
+        red = robot.getRed(1);
+
+        robot.actOnBallColor(red, blue, 1);
+
         robot.moveGripperFullClosed();
 
         waitForStart();

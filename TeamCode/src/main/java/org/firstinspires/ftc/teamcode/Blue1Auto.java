@@ -10,6 +10,9 @@ public class Blue1Auto extends LinearOpMode {
 
     private Robot robot = new Robot();
 
+    /*private int red;
+    private int blue;*/
+
     @Override
     public void runOpMode() throws InterruptedException {
         robot.getVuforiaKey();
@@ -17,6 +20,12 @@ public class Blue1Auto extends LinearOpMode {
 
         robot.init(hardwareMap, this);
         double currentRunTime = getRuntime();
+
+        /*blue = robot.getBlue(2);
+        red = robot.getRed(2);
+
+        robot.actOnBallColor(red, blue, 2);*/
+
         robot.enableGripper();
         robot.moveGripperFullClosed();
 
