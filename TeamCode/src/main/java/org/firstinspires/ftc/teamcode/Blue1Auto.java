@@ -29,7 +29,7 @@ public class Blue1Auto extends LinearOpMode {
 
         speed = robot.getJewelSpeed(side);
         robot.autoDrive(robot.inchesToTicks(1), speed);
-        sleep(8000);*/
+        sleep(2000);*/
 
         robot.moveGripperClosed();
 

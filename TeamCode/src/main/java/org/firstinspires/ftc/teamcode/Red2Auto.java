@@ -32,8 +32,11 @@ public class Red2Auto extends LinearOpMode {
         double speed;
 
         speed = robot.getJewelSpeed(side);
-        robot.autoDrive(robot.inchesToTicks(1), speed);
-        sleep(8000);
+        robot.autoDrive(robot.inchesToTicks(1.5), speed);
+        sleep(500);
+        robot.jewelT1Retract();
+        sleep(2000);
+
 
         robot.moveGripperClosed();
 
@@ -41,7 +44,7 @@ public class Red2Auto extends LinearOpMode {
         while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {
         }
 
-        robot.autoDrive(robot.inchesToTicks(24), -1);
+        robot.autoDrive(robot.inchesToTicks(30), -1);
         robot.autoTurn(1800, 1);
         currentRunTime = getRuntime();
         while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {
@@ -50,7 +53,7 @@ public class Red2Auto extends LinearOpMode {
         robot.autoDrive(robot.inchesToTicks(10), -1);
 
         robot.autoOpen();
-
+        sleep(1000);
         robot.autoDrive(robot.inchesToTicks(3), 1);
 
     }

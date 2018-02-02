@@ -43,12 +43,12 @@ public class Robot {
     private boolean isGripperDisabled = false;
 
     private final double GRIPPER_OPEN_LIMIT = 0.52;
-    private final double GRIPPER_CLOSED_LIMIT = 0.69;
+    private final double GRIPPER_CLOSED_LIMIT = 0.67;
 
-    private final double jewelExtendedPosition = 0.07;
+    private final double jewelExtendedPosition = 0.1;
     private final double jewelRetractPosition = 0.7;
 
-    int ballDifference = 20;
+    int ballDifference = 10;
 
     enum GripperState {
         MAX_OPEN, //MAX_OPEN might be used once limit switches are added for the open limit
@@ -265,29 +265,27 @@ public class Robot {
         this.ledEnable();
 
         this.jewelT1Extend();
-        linearOpMode.sleep(8000);
+        linearOpMode.sleep(2000);
 
-        while (ballColor == 0 && linearOpMode.opModeIsActive()) {
+        for (int i = 0; i < 10 && ballColor == 0; i++) {
             ballColor = getBallColor(getRed(1), getBlue(1));
+            linearOpMode.sleep(500);
         }
 
         if (side == 1) {
             if (ballColor == 1) {
-                this.jewelT1Retract();
                 return -1;
             } else if (ballColor == 2) {
-                this.jewelT1Retract();
                 return 1;
             }
         } else if (side == 2) {
             if (ballColor == 1) {
-                this.jewelT1Retract();
                 return 1;
             } else if (ballColor == 2) {
-                this.jewelT1Retract();
                 return -1;
             }
         }
+        this.jewelT1Retract();
         return 0;
     }
 }
