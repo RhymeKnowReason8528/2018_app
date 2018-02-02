@@ -13,6 +13,8 @@ public class Red1Auto extends LinearOpMode {
     private int red;
     private int blue;
 
+    int side = 1;
+
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -23,13 +25,18 @@ public class Red1Auto extends LinearOpMode {
         blue = robot.getBlue(1);
         red = robot.getRed(1);
 
-        robot.actOnBallColor(red, blue, 1);
+        //robot.getJewelSpeed(1);
 
-        robot.moveGripperFullClosed();
+        robot.moveGripperClosed();
 
         waitForStart();
 
-        robot.moveGripperFullClosed();
+        double speed;
+
+        //speed = robot.getJewelSpeed(side);
+        //robot.autoDrive(robot.inchesToTicks(1), speed);
+
+        robot.moveGripperClosed();
 
         currentRunTime = getRuntime();
         while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {

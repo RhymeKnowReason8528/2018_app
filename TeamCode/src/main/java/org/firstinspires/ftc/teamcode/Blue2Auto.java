@@ -10,8 +10,10 @@ public class Blue2Auto extends LinearOpMode {
 
     private Robot robot = new Robot();
 
-    /*private int red;
-    private int blue;*/
+    private int red;
+    private int blue;
+
+    int side = 2;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -19,15 +21,15 @@ public class Blue2Auto extends LinearOpMode {
         robot.init(hardwareMap, this);
         double currentRunTime = getRuntime();
 
-        /*blue = robot.getBlue(2);
-        red = robot.getRed(2);
-
-        robot.actOnBallColor(red, blue, 2);*/
-
         robot.enableGripper();
         robot.moveGripperFullClosed();
 
         waitForStart();
+
+        //double speed;
+
+        //speed = robot.getJewelSpeed(side);
+        //robot.autoDrive(robot.inchesToTicks(1), speed);
 
        // robot.gripper(0.50);
         robot.moveGripperFullClosed();

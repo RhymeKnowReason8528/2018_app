@@ -15,8 +15,6 @@ public class Test extends LinearOpMode{
 
         robot.init(hardwareMap, this);
 
-        robot.ledDisable();
-
         int red;
         int blue;
         int green;
@@ -33,10 +31,21 @@ public class Test extends LinearOpMode{
 
         robot.jewelT1Extend();
 
-        robot.ledEnable();
+        bc = "No Ball";
+
+        red = robot.getRed(1);
+        blue = robot.getBlue(1);
+        green = robot.getGreen(1);
+
+        bcNum = robot.getBallColor(red, blue);
+
+        double speed;
+
+        speed = robot.getJewelSpeed(1);
+        robot.autoDrive(robot.inchesToTicks(1), speed);
+        robot.ledDisable();
 
         while (opModeIsActive()) {
-
             //1 is red, 2 is blue
 
             bc = "No Ball";
@@ -52,8 +61,6 @@ public class Test extends LinearOpMode{
             } else if (bcNum == 2) {
                 bc = "Blue";
             }
-
-            robot.jewelExtension1.setPosition(robot.jewelPosition);
 
             telemetry.addData("Status: ", "Run Time: " + robot.runtime.toString());
             telemetry.addData("Jewel Servo: ", "Position: " + robot.jewelExtension1.getPosition());
