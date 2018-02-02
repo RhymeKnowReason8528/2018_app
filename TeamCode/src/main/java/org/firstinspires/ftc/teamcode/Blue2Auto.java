@@ -26,12 +26,12 @@ public class Blue2Auto extends LinearOpMode {
 
         waitForStart();
 
-        //double speed;
+        /*double speed;
 
-        //speed = robot.getJewelSpeed(side);
-        //robot.autoDrive(robot.inchesToTicks(1), speed);
+        speed = robot.getJewelSpeed(side);
+        robot.autoDrive(robot.inchesToTicks(1), speed);
+        sleep(8000);*/
 
-       // robot.gripper(0.50);
         robot.moveGripperFullClosed();
 
         currentRunTime = getRuntime();

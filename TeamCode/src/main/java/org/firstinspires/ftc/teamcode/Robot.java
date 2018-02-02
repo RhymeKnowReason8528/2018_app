@@ -45,8 +45,6 @@ public class Robot {
     private final double GRIPPER_OPEN_LIMIT = 0.52;
     private final double GRIPPER_CLOSED_LIMIT = 0.69;
 
-    public double jewelPosition;
-
     private final double jewelExtendedPosition = 0.07;
     private final double jewelRetractPosition = 0.7;
 
@@ -54,7 +52,6 @@ public class Robot {
 
     enum GripperState {
         MAX_OPEN, //MAX_OPEN might be used once limit switches are added for the open limit
-        //TODO: Order and add limit switches for the outside and the appropriate code
         CLOSED,
         MIDDLE
     }
@@ -79,7 +76,7 @@ public class Robot {
     }
 
     public void moveGripperClosed() {
-        if (getGripperState() != CLOSED && !isGripperDisabled && (gripperOneServo.getPosition() + GRIPPER_MODIFY) <= GRIPPER_CLOSED_LIMIT) {
+        while (getGripperState() != CLOSED && !isGripperDisabled && (gripperOneServo.getPosition() + GRIPPER_MODIFY) <= GRIPPER_CLOSED_LIMIT) {
             gripperOneServo.setPosition(gripperOneServo.getPosition() + GRIPPER_MODIFY);
         }
     }
@@ -88,7 +85,6 @@ public class Robot {
         while (getGripperState() != CLOSED) {
             moveGripperClosed();
         }
-        gripperServoPwmDisable();
     }
 
     public void moveGripperFullOpen() {
@@ -121,6 +117,9 @@ public class Robot {
     public void init(HardwareMap hwmap, LinearOpMode opMode) {
         leftDrive = hwmap.dcMotor.get("left_drive");
         rightDrive = hwmap.dcMotor.get("right_drive");
+
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
 
@@ -133,7 +132,8 @@ public class Robot {
         touchSensor2.setMode(DigitalChannel.Mode.INPUT);
 
         jewelExtension1 = (ServoImplEx) hwmap.servo.get("jewelServoRight");
-        jewelPosition = 0.5;
+
+        jewelT1Retract();
 
         colorSensor1 = hwmap.get(ColorSensor.class, "colorSensorRight");
 
@@ -141,6 +141,9 @@ public class Robot {
         initWithOpMode = true;
 
         gripperOneServo.setPosition(0.52);
+
+        leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void getVuforiaKey() {
@@ -164,15 +167,19 @@ public class Robot {
     }
 
     public void autoDrive(double distance, double speed) {
-        double motorPosition = rightDrive.getCurrentPosition();
+        double initialPosition = rightDrive.getCurrentPosition();
         if (speed > 0) {
-            while (rightDrive.getCurrentPosition() < distance + motorPosition && linearOpMode.opModeIsActive()) {
+            while (rightDrive.getCurrentPosition() < distance + initialPosition && linearOpMode.opModeIsActive()) {
+
                 leftDrive.setPower(speed);
                 rightDrive.setPower(speed);
+
+                linearOpMode.telemetry.addData("getCurrentPosition: ", "returning: " + rightDrive.getCurrentPosition());
+                linearOpMode.telemetry.update();
             }
         }
         if (speed < 0) {
-            while (rightDrive.getCurrentPosition() > (-distance) + motorPosition && linearOpMode.opModeIsActive()) {
+            while (rightDrive.getCurrentPosition() > initialPosition - distance && linearOpMode.opModeIsActive()) {
                 leftDrive.setPower(speed);
                 rightDrive.setPower(speed);
             }
@@ -199,14 +206,6 @@ public class Robot {
         rightDrive.setPower(0);
     }
 
-    public void ram(int speed, int distance) {
-        this.moveGripperClosed();
-        this.autoDrive(inchesToTicks(distance), -speed);
-        this.moveGripperOpen();
-        this.autoDrive(inchesToTicks(distance), speed);
-        this.moveGripperClosed();
-    }
-
     public void ledEnable() {
         colorSensor1.enableLed(true);
     }
@@ -215,29 +214,29 @@ public class Robot {
         colorSensor1.enableLed(false);
     }
 
-    public int getRGB(int colorSense) {
-        if (colorSense == 1) {
+    public int getRGB(int colorSensor) {
+        if (colorSensor == 1) {
             retVal = colorSensor1.argb();
         }
         return retVal;
     }
 
-    public int getRed(int colorSense) {
-        if (colorSense == 1) {
+    public int getRed(int colorSensor) {
+        if (colorSensor == 1) {
             return colorSensor1.red();
         }
         return 0;
     }
 
-    public int getBlue(int colorSense) {
-        if (colorSense == 1) {
+    public int getBlue(int colorSensor) {
+        if (colorSensor == 1) {
             return colorSensor1.blue();
         }
         return 0;
     }
 
-    public int getGreen(int colorSense) {
-        if (colorSense == 1) {
+    public int getGreen(int colorSensor) {
+        if (colorSensor == 1) {
             return colorSensor1.green();
         }
         return 0;
@@ -253,36 +252,42 @@ public class Robot {
     }
 
     public void jewelT1Retract() {
-        jewelPosition = jewelRetractPosition;
+        jewelExtension1.setPosition(jewelRetractPosition);
     }
 
     public void jewelT1Extend() {
-        jewelPosition = jewelExtendedPosition;
+        jewelExtension1.setPosition(jewelExtendedPosition);
     }
 
-    public void actOnBallColor(int r, int b, int side) {
+    int getJewelSpeed(int side) {
         //1 is red, 2 is blue
 
-        jewelT1Extend();
-        ballColor = getBallColor(r, b);
-        while (ballColor == 0) {
-            ballColor = getBallColor(r, b);
+        this.ledEnable();
+
+        this.jewelT1Extend();
+        linearOpMode.sleep(8000);
+
+        while (ballColor == 0 && linearOpMode.opModeIsActive()) {
+            ballColor = getBallColor(getRed(1), getBlue(1));
         }
 
         if (side == 1) {
             if (ballColor == 1) {
-                ram(1, 1);
+                this.jewelT1Retract();
+                return -1;
             } else if (ballColor == 2) {
-                ram(1, -1);
+                this.jewelT1Retract();
+                return 1;
             }
         } else if (side == 2) {
             if (ballColor == 1) {
-                ram(-1, 1);
+                this.jewelT1Retract();
+                return 1;
             } else if (ballColor == 2) {
-                ram(1, 1);
+                this.jewelT1Retract();
+                return -1;
             }
         }
-
-        jewelT1Retract();
+        return 0;
     }
 }

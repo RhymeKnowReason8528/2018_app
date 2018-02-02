@@ -25,17 +25,17 @@ public class Red2Auto extends LinearOpMode {
         red = robot.getRed(1);
 
         robot.enableGripper();
-        robot.moveGripperFullClosed();
+        robot.moveGripperClosed();
 
         waitForStart();
 
-        //double speed;
+        double speed;
 
-        //speed = robot.getJewelSpeed(side);
-        //robot.autoDrive(robot.inchesToTicks(1), speed);
-        //sleep(8000);
+        speed = robot.getJewelSpeed(side);
+        robot.autoDrive(robot.inchesToTicks(1), speed);
+        sleep(8000);
 
-        robot.moveGripperFullClosed();
+        robot.moveGripperClosed();
 
         currentRunTime = getRuntime();
         while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {

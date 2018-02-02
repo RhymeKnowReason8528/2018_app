@@ -25,16 +25,15 @@ public class Red1Auto extends LinearOpMode {
         blue = robot.getBlue(1);
         red = robot.getRed(1);
 
-        //robot.getJewelSpeed(1);
-
         robot.moveGripperClosed();
 
         waitForStart();
 
-        double speed;
+        /*double speed;
 
-        //speed = robot.getJewelSpeed(side);
-        //robot.autoDrive(robot.inchesToTicks(1), speed);
+        speed = robot.getJewelSpeed(side);
+        robot.autoDrive(robot.inchesToTicks(1), speed);
+        sleep(8000);*/
 
         robot.moveGripperClosed();
 
