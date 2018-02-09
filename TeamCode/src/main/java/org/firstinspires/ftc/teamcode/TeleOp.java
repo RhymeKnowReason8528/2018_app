@@ -21,7 +21,7 @@ public class TeleOp extends LinearOpMode {
         double leftPower;
         double rightPower;
 
-        double armPos = 0.3;
+        double armPos = 0.48;
 
         final double ARM_MODIFY = 0.002;
 
@@ -31,8 +31,6 @@ public class TeleOp extends LinearOpMode {
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
-        robot.arm(robot.armServo.getPosition());
 
         robot.enableGripper();
 
@@ -115,6 +113,7 @@ public class TeleOp extends LinearOpMode {
             telemetry.addData("touch sensor 2", robot.touchSensor2.getState());
             telemetry.addData("is gripper disabled", robot.isGripperDisabled());
             telemetry.addData("gripper Position", robot.gripperOneServo.getPosition());
+            telemetry.addData("arm position,", robot.armServo.getPosition());
             telemetry.update();
         }
     }
