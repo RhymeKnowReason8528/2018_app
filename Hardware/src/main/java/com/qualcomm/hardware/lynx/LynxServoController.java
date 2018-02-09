@@ -232,7 +232,7 @@ public class LynxServoController extends LynxController implements ServoControll
                 command.send();
             } catch (InterruptedException | RuntimeException | LynxNackException e) {
                 handleException(e);
-            }
+        }
 
             // Auto-enable after setting position to match historical behavior (and because it's handy)
             this.internalSetPwmEnable(servo, true);

@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.ServoControllerEx;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -23,10 +23,18 @@ public class Robot {
     public ServoImplEx gripperOneServo;
     public ServoImplEx armServo;
 
+    public ServoImplEx jewelExtension1;
+
     // get a reference to our digitalTouch object.
 
     DigitalChannel touchSensor1;
     DigitalChannel touchSensor2;
+
+    int ballColor;
+
+    int retVal;
+
+    ColorSensor colorSensor1;
 
     public String KEY = new String();
 
@@ -35,21 +43,25 @@ public class Robot {
     private boolean isGripperDisabled = false;
 
     private final double GRIPPER_OPEN_LIMIT = 0.52;
-    private final double GRIPPER_CLOSED_LIMIT = 0.69;
+    private final double GRIPPER_CLOSED_LIMIT = 0.67;
+
+    private final double jewelExtendedPosition = 0.1;
+    private final double jewelRetractPosition = 0.7;
+
+    int ballDifference = 10;
 
     enum GripperState {
         MAX_OPEN, //MAX_OPEN might be used once limit switches are added for the open limit
-        //TODO: Order and add limit switches for the outside and the appropriate code
         CLOSED,
         MIDDLE
     }
-    
+
     final double GRIPPER_MODIFY = 0.004;
 
     public GripperState getGripperState() {
 
         if (touchSensor1.getState() == false && touchSensor2.getState() == false) {
-             return GripperState.CLOSED;
+            return GripperState.CLOSED;
         } /*else if (!outer limit switch) {
                 gripperState = GripperState.MAX_OPEN;
             } */ else {
@@ -58,26 +70,25 @@ public class Robot {
     }
 
     public void moveGripperOpen() {
-        if(getGripperState() != MAX_OPEN && !isGripperDisabled && (gripperOneServo.getPosition() - GRIPPER_MODIFY) >= GRIPPER_OPEN_LIMIT) {
+        if (getGripperState() != MAX_OPEN && !isGripperDisabled && (gripperOneServo.getPosition() - GRIPPER_MODIFY) >= GRIPPER_OPEN_LIMIT) {
             gripperOneServo.setPosition(gripperOneServo.getPosition() - GRIPPER_MODIFY);
         }
     }
 
     public void moveGripperClosed() {
-        if (getGripperState() != CLOSED && !isGripperDisabled && (gripperOneServo.getPosition() + GRIPPER_MODIFY) <= GRIPPER_CLOSED_LIMIT)  {
+        while (getGripperState() != CLOSED && !isGripperDisabled && (gripperOneServo.getPosition() + GRIPPER_MODIFY) <= GRIPPER_CLOSED_LIMIT) {
             gripperOneServo.setPosition(gripperOneServo.getPosition() + GRIPPER_MODIFY);
         }
     }
 
     public void moveGripperFullClosed() {
-        while(getGripperState() != CLOSED) {
+        while (getGripperState() != CLOSED) {
             moveGripperClosed();
         }
-        gripperServoPwmDisable();
     }
 
     public void moveGripperFullOpen() {
-        while(getGripperState() != GripperState.MAX_OPEN && gripperOneServo.getPosition() - GRIPPER_MODIFY > GRIPPER_OPEN_LIMIT) {
+        while (getGripperState() != GripperState.MAX_OPEN && gripperOneServo.getPosition() - GRIPPER_MODIFY > GRIPPER_OPEN_LIMIT) {
             moveGripperClosed();
         }
         gripperServoPwmDisable();
@@ -102,9 +113,13 @@ public class Robot {
     public boolean isGripperDisabled() {
         return isGripperDisabled;
     }
-    public void init (HardwareMap hwmap, LinearOpMode opMode) {
-        leftDrive  = hwmap.dcMotor.get("left_drive");
+
+    public void init(HardwareMap hwmap, LinearOpMode opMode) {
+        leftDrive = hwmap.dcMotor.get("left_drive");
         rightDrive = hwmap.dcMotor.get("right_drive");
+
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
 
@@ -116,10 +131,19 @@ public class Robot {
         touchSensor1.setMode(DigitalChannel.Mode.INPUT);
         touchSensor2.setMode(DigitalChannel.Mode.INPUT);
 
+        jewelExtension1 = (ServoImplEx) hwmap.servo.get("jewelServoRight");
+
+        jewelT1Retract();
+
+        colorSensor1 = hwmap.get(ColorSensor.class, "colorSensorRight");
+
         linearOpMode = opMode;
         initWithOpMode = true;
 
         gripperOneServo.setPosition(0.52);
+
+        leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void getVuforiaKey() {
@@ -142,16 +166,20 @@ public class Robot {
         return (go * rotation);
     }
 
-    public void autoDrive (double distance, double speed) {
-        double motorPosition = rightDrive.getCurrentPosition();
-        if(speed > 0) {
-            while(rightDrive.getCurrentPosition() < distance + motorPosition && linearOpMode.opModeIsActive()) {
+    public void autoDrive(double distance, double speed) {
+        double initialPosition = rightDrive.getCurrentPosition();
+        if (speed > 0) {
+            while (rightDrive.getCurrentPosition() < distance + initialPosition && linearOpMode.opModeIsActive()) {
+
                 leftDrive.setPower(speed);
                 rightDrive.setPower(speed);
+
+                linearOpMode.telemetry.addData("getCurrentPosition: ", "returning: " + rightDrive.getCurrentPosition());
+                linearOpMode.telemetry.update();
             }
         }
-        if(speed < 0) {
-            while(rightDrive.getCurrentPosition() > (-distance) + motorPosition && linearOpMode.opModeIsActive()) {
+        if (speed < 0) {
+            while (rightDrive.getCurrentPosition() > initialPosition - distance && linearOpMode.opModeIsActive()) {
                 leftDrive.setPower(speed);
                 rightDrive.setPower(speed);
             }
@@ -160,16 +188,16 @@ public class Robot {
         rightDrive.setPower(0);
     }
 
-    public void autoTurn (double distance, double speed) {
+    public void autoTurn(double distance, double speed) {
         double motorPosition = rightDrive.getCurrentPosition();
-        if(speed > 0) {
-            while(rightDrive.getCurrentPosition() < distance + motorPosition && linearOpMode.opModeIsActive()) {
+        if (speed > 0) {
+            while (rightDrive.getCurrentPosition() < distance + motorPosition && linearOpMode.opModeIsActive()) {
                 leftDrive.setPower(-speed);
                 rightDrive.setPower(speed);
             }
         }
-        if(speed < 0) {
-            while(rightDrive.getCurrentPosition() > (-distance) + motorPosition && linearOpMode.opModeIsActive()) {
+        if (speed < 0) {
+            while (rightDrive.getCurrentPosition() > (-distance) + motorPosition && linearOpMode.opModeIsActive()) {
                 leftDrive.setPower(-speed);
                 rightDrive.setPower(speed);
             }
@@ -178,4 +206,86 @@ public class Robot {
         rightDrive.setPower(0);
     }
 
+    public void ledEnable() {
+        colorSensor1.enableLed(true);
+    }
+
+    public void ledDisable() {
+        colorSensor1.enableLed(false);
+    }
+
+    public int getRGB(int colorSensor) {
+        if (colorSensor == 1) {
+            retVal = colorSensor1.argb();
+        }
+        return retVal;
+    }
+
+    public int getRed(int colorSensor) {
+        if (colorSensor == 1) {
+            return colorSensor1.red();
+        }
+        return 0;
+    }
+
+    public int getBlue(int colorSensor) {
+        if (colorSensor == 1) {
+            return colorSensor1.blue();
+        }
+        return 0;
+    }
+
+    public int getGreen(int colorSensor) {
+        if (colorSensor == 1) {
+            return colorSensor1.green();
+        }
+        return 0;
+    }
+
+    public int getBallColor(int r, int b) {
+        if (r >= (b + ballDifference)) {
+            return 1;
+        } else if (b >= (r + ballDifference)) {
+            return 2;
+        }
+        return 0;
+    }
+
+    public void jewelT1Retract() {
+        jewelExtension1.setPosition(jewelRetractPosition);
+    }
+
+    public void jewelT1Extend() {
+        jewelExtension1.setPosition(jewelExtendedPosition);
+    }
+
+    int getJewelSpeed(int side) {
+        //1 is red, 2 is blue
+
+        this.ledEnable();
+
+        this.jewelT1Extend();
+        linearOpMode.sleep(2000);
+
+        for (int i = 0; i < 10 && ballColor == 0; i++) {
+            ballColor = getBallColor(getRed(1), getBlue(1));
+            linearOpMode.sleep(500);
+        }
+
+        if (side == 1) {
+            if (ballColor == 1) {
+                return -1;
+            } else if (ballColor == 2) {
+                return 1;
+            }
+        } else if (side == 2) {
+            if (ballColor == 1) {
+                return 1;
+            } else if (ballColor == 2) {
+                return -1;
+            }
+        }
+        this.jewelT1Retract();
+        return 0;
+    }
 }
