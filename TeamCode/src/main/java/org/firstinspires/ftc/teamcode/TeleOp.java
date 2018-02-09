@@ -21,7 +21,7 @@ public class TeleOp extends LinearOpMode {
         double leftPower;
         double rightPower;
 
-        double armPos = 0.09;
+        double armPos = 0.48;
 
         final double ARM_MODIFY = 0.002;
 
