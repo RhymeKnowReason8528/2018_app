@@ -8,6 +8,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+
 import static org.firstinspires.ftc.teamcode.Robot.GripperState.CLOSED;
 import static org.firstinspires.ftc.teamcode.Robot.GripperState.MAX_OPEN;
 
@@ -30,6 +35,9 @@ public class Robot {
     DigitalChannel touchSensor1;
     DigitalChannel touchSensor2;
 
+    public VuforiaTrackable relicTemplate;
+    public VuforiaTrackables relicTrackables;
+
     int ballColor;
 
     int retVal;
@@ -49,6 +57,8 @@ public class Robot {
     private final double jewelRetractPosition = 0.7;
 
     int ballDifference = 10;
+
+    VuforiaLocalizer vuforia_localizer;
 
     enum GripperState {
         MAX_OPEN, //MAX_OPEN might be used once limit switches are added for the open limit
@@ -136,6 +146,21 @@ public class Robot {
 
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public void vuforiaInit(HardwareMap hardwareMap, String direction) {
+        getVuforiaKey();
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+
+        parameters.vuforiaLicenseKey = KEY;
+
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
+        vuforia_localizer = ClassFactory.createVuforiaLocalizer(parameters);
+
+        relicTrackables = vuforia_localizer.loadTrackablesFromAsset("RelicVuMark");
+        relicTemplate = relicTrackables.get(0);
     }
 
     public void getVuforiaKey() {
