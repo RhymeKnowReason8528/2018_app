@@ -1,9 +1,12 @@
-
 def adbLocation = android.getAdbExecutable().absolutePath
 
 task setupFirstFolder(type: Exec) {
     def createFirstFolderCommand = [adbLocation, 'shell', 'mkdir', '-p', '/sdcard/FIRST']
     commandLine createFirstFolderCommand
+    ignoreExitValue = true
+
+    standardOutput = new ByteArrayOutputStream()
+    errorOutput = new ByteArrayOutputStream()
 
     doLast {
         exec {
@@ -11,6 +14,10 @@ task setupFirstFolder(type: Exec) {
                                        'android.intent.action.MEDIA_SCANNER_SCAN_FILE',
                                        '-d', 'file:/sdcard/FIRST']
             commandLine mtpBroadcastCommand
+            ignoreExitValue = true
+
+            standardOutput = new ByteArrayOutputStream()
+            errorOutput = new ByteArrayOutputStream()
         }
     }
 }
@@ -67,7 +74,7 @@ task pushVuforiaIfNecessary(type: Exec) {
 tasks.whenTaskAdded { task ->
     // I chose this task because it is never shown as "UP-TO-DATE" when you run Gradle without changing anything.
     // We should verify that that hasn't changed whenever we update the Android Gradle plugin.
-    if (task.name == 'validateSigningOpenftcDebug') {
+    if (task.name == 'validateSigningOpenrcDebug') {
         task.dependsOn(pushVuforiaIfNecessary)
     }
 }

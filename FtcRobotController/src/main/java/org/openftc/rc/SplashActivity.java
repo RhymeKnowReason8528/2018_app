@@ -1,4 +1,26 @@
-package org.openftc.robotcontroller;
+
+/*
+ * Copyright (c) 2017 FTC team 4634 FROGbots
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package org.openftc.rc;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,8 +35,8 @@ import android.widget.TextView;
 import com.cyanogenmod.updater.utils.MD5;
 
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
-import org.openftc.exceptions.VuforiaCorruptedException;
-import org.openftc.exceptions.VuforiaNotFoundException;
+import org.openftc.rc.exceptions.VuforiaCorruptedException;
+import org.openftc.rc.exceptions.VuforiaNotFoundException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -130,7 +152,7 @@ public class SplashActivity extends Activity
                 " on the phone's storage yourself.<br><br>" +
 
                 "<a href='https://github.com/OpenFTC/OpenFTC-app-turbo/blob/5b706b920252ed810038849e4c52c7c5c89e56ef/doc/libVuforia.so?raw=true'>" +
-                "You can find it in the 'doc' folder of the OpenFTC repository</a>.";
+                "You can find it in the 'doc' folder of the OpenRC repository</a>.";
 
         AlertDialog dialog = new AlertDialog.Builder(this)
         .setTitle("libVuforia.so not found!")

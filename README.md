@@ -1,58 +1,128 @@
-# OpenFTC-app-turbo is to be used at your own risk. 
+# OpenFTC-app-turbo is to be used at your own risk.
 #### While every change is made with care not to break anything, FIRST has not tested our modifications. Volunteers at competitions may be less willing to assist you if you use OpenFTC. Our community is very helpful though, so please create an issue if you encounter any problems.
-
-[Sign up for our mailing list](https://goo.gl/forms/xFBIx0Ptk3Br7ZOD2) for notifications about updates and upcoming new projects. 
-
-[Join us on Discord](https://discord.gg/Q3CgrxU) for real-time support or to ask questions.
-
-OpenFTC-app is currently based on version 3.5 of the SDK. Do not attempt to manually update beyond that yourself. OpenFTC will be updated within a week of new official app releases.
-
-The OpenFTC documentation is still under construction.
 
 ---
 
+[Sign up for our mailing list](http://eepurl.com/dgZbKj) for notifications about updates and upcoming new projects.
+
+[Join us on the OpenFTC Discord](https://discord.gg/Q3CgrxU) for real-time support or to ask questions.
+
+OpenRC is currently based on version 3.6 of the SDK. Do not attempt to manually update beyond that yourself. OpenRC will
+be updated within a week of new official app releases.
+
+The OpenRC documentation is still under construction.
+
+---
+
+OpenRC-turbo removes the OnBotJava and Blocks programming systems for teams that don't use them, speeding up deploy time
+by removing the large files required for those systems. If you use these systems, please see
+[the standard version of OpenRC](https://github.com/OpenFTC/OpenRC).
 OpenFTC-app-turbo removes the OnBotJava and Blocks programming systems for teams that don't use them, speeding up deploy time by removing the large files required for those systems. If you use these systems, please see [OpenFTC-app](https://github.com/OpenFTC/OpenFTC-app).
 
+The OpenRC family of Robot Controller apps are brought to you by the OpenFTC community. They are based on the official
+[FTC SDK](https://github.com/ftctechnh/ftc_app) (Software Development Kit), but the AAR files used there have been
+converted to first-class modules in the OpenRC Android Studio project. This makes it easy to see and modify almost the
+entirety of the Robot Controller app's source code. In addition, the history in Git shows all changes that have been
+made to the core code since OpenRC's inception. This is a very useful supplement to the changelogs that FIRST provides -
+teams can see exactly what code has been changed and determine how those changes will affect them.
+This system allows pull requests and enhancements to the code of the entire SDK, and can allow teams to understand the
+structure and functionality of the whole system. Enhancements will be considered as long as they _do not force teams to
+change their workflow._ Changes made in the OpenRC should keep it possible for teams to move from the official SDK to
+OpenRC with no code changes required.
 The OpenFTC family of Robot Controller apps provide teams a new way to use the [FTC SDK](https://github.com/ftctechnh/ftc_app) (Software Development Kit). Since the AAR files have been converted to modules in the Android Studio project, it's easy to see and modify the entirety of the SDK's source code. In addition, the history in Git shows all changes that have been made to the core code since OpenFTC's inception. This is a very useful supplement to the changelogs that FIRST provides - teams can see exactly which code has been changed and how it will affect them.
 
+To request a new feature, you can open an issue on this repository. If there's a large enough call for the feature, it's
+very likely to be added to the list for a future release.
 This system allows pull requests and enhancements to the code of the entire SDK, and can allow teams to understand the structure and functionality of the whole system. Most enhancements will likely be accepted as long as they _do not force teams to change their workflow._ Changes made in the OpenFTC SDK should allow teams to move from the official SDK to OpenFTC-app with no code changes required.
 
 To request a new feature, you can open an issue on this repository. If there's a large enough call for the feature, it's very likely to be added to the list for a future release.
 
-## Welcome!
-This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge competition robot.  To use this SDK, download/clone the entire project to your local computer.
+# Release Notes
+To see the release notes for FIRST's releases of this SDK, see [doc/FIRST_CHANGELOG.md](doc/FIRST_CHANGELOG.md)
 
-If you are new to the *FIRST* Tech Challenge software and control system, you should visit the online wiki to learn how to install, configure, and use the software and control system:
+## 2.0 beta 2
+* CRITICAL BUG FIX: The app wouldn't automatically restart when it ought to. Now it will.
+* Updated Gradle from version 4.1 to version 4.5
+* Updated the ancient Gradle Wrapper
+* Tiny text fixes
+
+## 2.0 beta 1
+* Renamed from OpenFTC-app and OpenFTC-app-turbo to OpenRC and OpenRC-turbo. OpenFTC is now solely the name of the team
+  and community that develops these apps and others.
+* ‎Added stockDebug build configuration that will build an app without any of the OpenFTC modifications enabled
+* ‎Large deployment time improvements for both Turbo and Full variants (accomplished by pushing Vuforia once from a new
+  Gradle task, instead of every time bundled inside the APK)
+* ‎Added an easy way to keep your Vuforia key off of GitHub (which would violate the Vuforia Developer Agreement)
+* ‎Fix for Instant Run (It's recommended that you continue to leave instant run turned off in the Android Studio
+  settings. In addition, be aware that changes applied with the instant run lightning bolt button may not persist when
+  you restart the app.)
+* ‎Updated to version 3.6 of the official RC app
+* Migrated to version 3 of the Android Gradle plugin (Android Studio 3.0 or later is now required)
+* ‎Ran Android Studio's formatting tool on the entire project. If you made any changes to files outside of TeamCode, you
+  will almost certainly have merge conflicts because of this.
+* ‎Show OpenRC version on about screen
+* ‎Added splash screen
+* ‎Removed all Vuforia targets except for the VuMarks used in Relic Recovery (for additional size reduction and lower
+  deployment times)
+* Show OpenRC version when the robot controller inspection screen is viewed from the driver station
+
+## 1.1
+* Updated the app to be based on version 3.5 of the official SDK.
+
+## Pre-1.1
+* Extracted the aar files and associated source jars into full, easily changed source code modules.
+* Warn user if the driver station app is installed on the device
+* Fixed bug with log viewer colorization
+* Add option that allows the user to choose whether lines should wrap in the log viewer (they don't by default now)
+* Changed the icon to make the app more easily distinguishable from the official one
+* Added the OpenFTC version to the main screen
+* Added "About OpenFTC" button to the about screen
+* Allowed Gradle to use more RAM (up to 2GB) for faster build times
+##### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Turbo-specific changes
+* Initial Turbo release that removes the Blocks and OnBotJava features
+
+## Welcome!
+This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge
+competition robot.  To use this SDK, download/clone the entire project to your local computer. If you are new to the
+*FIRST* Tech Challenge software and control system, you should visit the online wiki to learn how to install, configure,
+and use the software and control system:
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://github.com/ftctechnh/ftc_app/wiki
 
-Note that the wiki is an "evergreen" document that is constantly being updated and edited.  It contains the most current information about the *FIRST* Tech Challenge software and control system.
+Note that the wiki is an "evergreen" document that is constantly being updated and edited.  It contains the most current
+information about the *FIRST* Tech Challenge software and control system.
 
 ## Downloading the Project
-It is important to note that this repository is large and can take a long time and use a lot of space to download. If you would like to save time and space, there are some options that you can choose to download only the most current version of the Android project folder:
+It is important to note that this repository is large and can take a long time and use a lot of space to download. If
+you would like to save time and space, there are some options that you can choose to download only the most current
+version of the Android project folder:
 
-* If you are a git user, *FIRST* recommends that you use the --depth command line argument to only clone the most current version of the repository:
+* If you are a git user, *FIRST* recommends that you use the --depth command line argument to only clone the most
+current version of the repository:
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;git clone --depth=1 https://github.com/ftctechnh/ftc_app.git</p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`git clone --depth=1 https://github.com/ftctechnh/ftc_app.git`
 
-* Or, if you prefer, you can use the "Download Zip" button available through the main repository page.  Downloading the project as a .ZIP file will keep the size of the download manageable.
+* Or, if you prefer, you can use the "Download Zip" button available through the main repository page.  Downloading the
+project as a .ZIP file will keep the size of the download manageable.
 
-* You can also download the project folder (as a .zip or .tar.gz archive file) from the Downloads subsection of the Releases page for this repository.
-
-Once you have downloaded and uncompressed (if needed) your folder, you can use Android Studio to import the folder  ("Import project (Eclipse ADT, Gradle, etc.)").
+Once you have downloaded and uncompressed (if needed) your folder, you can use Android Studio to import the folder
+("Import project (Eclipse ADT, Gradle, etc.)").
 
 ## Getting Help
 ### User Documentation and Tutorials
-*FIRST* maintains an online wiki with information and tutorials on how to use the *FIRST* Tech Challenge software and robot control system.  You can access the wiki at the following address:
+*FIRST* maintains an online wiki with information and tutorials on how to use the *FIRST* Tech Challenge software and
+robot control system.  You can access the wiki at the following address:
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://github.com/ftctechnh/ftc_app/wiki
 
 ### Javadoc Reference Material
-The Javadoc reference documentation for the FTC SDK is now available online.  Visit the following URL to view the FTC SDK documentation as a live website:
+The Javadoc reference documentation for the FTC SDK is now available online.  Visit the following URL to view the FTC
+SDK documentation as a live website:
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://ftctechnh.github.io/ftc_app/doc/javadoc/index.html    
 
-Documentation for the FTC SDK is also included with this repository.  There is a subfolder called "doc" which contains several subfolders:
+Documentation for the FTC SDK is also included with this repository.  There is a subfolder called "doc" which contains
+several subfolders:
 
  * The folder "apk" contains the .apk files for the FTC Driver Station and FTC Robot Controller apps.
  * The folder "javadoc" contains the JavaDoc user documentation for the FTC SDK.
@@ -137,21 +207,21 @@ Changes with verion 3.3 include:
     - Sample op modes can be selected as a template when creating new op mode.
     - Fixes and changes to complete hardware setup feature.
     - Updated (and more useful) onBot welcome message.
-    
+
 Known issues:
  * Android Studio
     - After updating to the new v3.3 Android Studio project folder, if you get error messages indicating "InvalidVirtualFileAccessException" then you might need to do a File->Invalidate Caches / Restart to clear the error.
 
  * OnBot Java
     - Sometimes when you push the build button to build all op modes, the RC returns an error message that the build failed.  If you press the build button a second time, the build typically suceeds.
-    
+
 **************************************************************************************
 
 Version 3.2 (built on 17.08.02)
 
 This version of the software introduces the "OnBot Java" Development Tool.  Similar to the FTC Blocks Development Tool, the FTC OnBot Java Development Tool allows a user to create, edit and build op modes dynamically using only a Javascript-enabled web browser.
 
-The OnBot Java Development Tool is an integrated development environment (IDE) that is served up by the Robot Controller.  Op modes are created and edited using a Javascript-enabled browser (Google Chromse is recommended).  Op modes are saved on the Robot Controller Android device directly.  
+The OnBot Java Development Tool is an integrated development environment (IDE) that is served up by the Robot Controller.  Op modes are created and edited using a Javascript-enabled browser (Google Chromse is recommended).  Op modes are saved on the Robot Controller Android device directly.
 
 The OnBot Java Development Tool provides a Java programming environment that does NOT need Android Studio.
 
@@ -237,7 +307,7 @@ Changes include:
     - Blocks execute after while-opModeIsActive loop (to allow for cleanup before exiting op mode).
     - Added gyro integratedZValue block.
     - Fixes bug with projects page for Firefox browser.
-    - Added IsSpeaking block to AndroidTextToSpeech.  
+    - Added IsSpeaking block to AndroidTextToSpeech.
  * Implements support for the REV Robotics Expansion Hub
     - Implements support for integral REV IMU (physically installed on I2C bus 0, uses same Bosch BNO055 9 axis absolute orientation sensor as Adafruit 9DOF abs orientation sensor).    - Implements support for REV color/range/light sensor.
     - Provides support to update Expansion Hub firmware through FTC SDK.
@@ -297,7 +367,7 @@ Version 2.5 (internal release on released on 16.12.13)
      - Added type safety to blocks for LightSensor.
      - Added type safety to blocks for LinearOpMode.
      - Added type safety to blocks for MagneticFlux.
-     - Added type safety to blocks for MatrixF.     
+     - Added type safety to blocks for MatrixF.
      - Added type safety to blocks for MrI2cCompassSensor.
      - Added type safety to blocks for MrI2cRangeSensor.
      - Added type safety to blocks for OpticalDistanceSensor.
@@ -432,7 +502,7 @@ Version 2.00 (released on 16.08.19)
  * Standardized units in analog input.
  * Cleaned up code for existing analog sensor classes.
  * setChannelMode and getChannelMode were REMOVED from the DcMotorController class.  This is important - we no longer set the motor modes through the motor controller.
- * setMode and getMode were added to the DcMotor class.  
+ * setMode and getMode were added to the DcMotor class.
  * ContinuousRotationServo class has been added to the FTC SDK.
  * Range.clip() method has been overloaded so it can support this operation for int, short and byte integers.
  * Some changes have been made (new methods added) on how a user can access items from the hardware map.
@@ -512,7 +582,7 @@ Release 16.02.09
     - If user attempts to start/restart RC with one or more module missing, it will display a warning but still start up.
     - When running an op mode, if one or more modules gets disconnected, the RC & DS will display warnings,and robot will keep on working in spite of the missing module(s).
     - If a disconnected module gets physically reconnected the RC will auto detect the module and the user will regain control of the recently connected module.
-    - Warning messages are more helpful (identifies the type of module that’s missing plus its USB serial number).   
+    - Warning messages are more helpful (identifies the type of module that’s missing plus its USB serial number).
  * Code changes to fix the null gamepad reference when users try to reference the gamepads in the init() portion of their op mode.
  * NXT light sensor output is now properly scaled.  Note that teams might have to readjust their light threshold values in their op modes.
  * On DS user interface, gamepad icon for a driver will disappear if the matching gamepad is disconnected or if that gamepad gets designated as a different driver.
