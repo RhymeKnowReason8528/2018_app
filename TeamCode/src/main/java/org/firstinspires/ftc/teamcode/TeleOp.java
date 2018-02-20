@@ -2,9 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import static org.firstinspires.ftc.teamcode.Robot.GripperState.CLOSED;
 import static org.firstinspires.ftc.teamcode.Robot.GripperState.MIDDLE;
-import static org.firstinspires.ftc.teamcode.Robot.GripperState.MAX_OPEN;
 /* 124 lines
  * Human-Controlled Operation program v 1.1 */
 
@@ -79,7 +77,7 @@ public class TeleOp extends LinearOpMode {
 
             if (robot.isGripperDisabled() == false) {
                 if (robot.getGripperState() != MIDDLE) {
-                    robot.gripperServoPwmDisable();
+                    robot.gripperOneMotor.setPower(0);
                 }
                 if (gamepad2.right_bumper)  {
                     robot.moveGripperClosed();
@@ -88,7 +86,7 @@ public class TeleOp extends LinearOpMode {
                 }
 
             } else {
-                robot.gripperServoPwmDisable();
+                robot.gripperOneMotor.setPower(0);
             }
 
             //Allow the driver to manually turn off the servo (to prevent burning it out during a match)
@@ -114,7 +112,6 @@ public class TeleOp extends LinearOpMode {
             telemetry.addData("touch sensor 1: ", robot.touchSensor1.getState());
             telemetry.addData("touch sensor 2", robot.touchSensor2.getState());
             telemetry.addData("is gripper disabled", robot.isGripperDisabled());
-            telemetry.addData("gripper Position", robot.gripperOneServo.getPosition());
             telemetry.update();
         }
     }

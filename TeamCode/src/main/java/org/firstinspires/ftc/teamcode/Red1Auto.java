@@ -43,8 +43,6 @@ public class Red1Auto extends LinearOpMode {
 
         robot.autoDrive(robot.inchesToTicks(30), -1);
 
-        robot.autoOpen();
-
         robot.autoDrive(robot.inchesToTicks(3), 1);
 
     }

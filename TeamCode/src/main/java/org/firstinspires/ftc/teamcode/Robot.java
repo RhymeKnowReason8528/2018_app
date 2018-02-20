@@ -20,7 +20,7 @@ public class Robot {
     ElapsedTime runtime = new ElapsedTime();
     DcMotor leftDrive = null;
     DcMotor rightDrive = null;
-    public ServoImplEx gripperOneServo;
+    public DcMotor gripperOneMotor;
     public ServoImplEx armServo;
 
     public ServoImplEx jewelExtension1;
@@ -70,14 +70,14 @@ public class Robot {
     }
 
     public void moveGripperOpen() {
-        if (getGripperState() != MAX_OPEN && !isGripperDisabled && (gripperOneServo.getPosition() - GRIPPER_MODIFY) >= GRIPPER_OPEN_LIMIT) {
-            gripperOneServo.setPosition(gripperOneServo.getPosition() - GRIPPER_MODIFY);
+        if (getGripperState() != MAX_OPEN && !isGripperDisabled) {
+            gripperOneMotor.setPower(-1);
         }
     }
 
     public void moveGripperClosed() {
-        while (getGripperState() != CLOSED && !isGripperDisabled && (gripperOneServo.getPosition() + GRIPPER_MODIFY) <= GRIPPER_CLOSED_LIMIT) {
-            gripperOneServo.setPosition(gripperOneServo.getPosition() + GRIPPER_MODIFY);
+        if (getGripperState() != CLOSED && !isGripperDisabled) {
+            gripperOneMotor.setPower(1);
         }
     }
 
@@ -88,18 +88,10 @@ public class Robot {
     }
 
     public void moveGripperFullOpen() {
-        while (getGripperState() != GripperState.MAX_OPEN && gripperOneServo.getPosition() - GRIPPER_MODIFY > GRIPPER_OPEN_LIMIT) {
+        while (getGripperState() != GripperState.MAX_OPEN) {
             moveGripperClosed();
         }
-        gripperServoPwmDisable();
-    }
-
-    public void autoOpen() {
-        gripperOneServo.setPosition(0.56);
-    }
-
-    public void gripperServoPwmDisable() {
-        gripperOneServo.setPwmDisable();
+        gripperOneMotor.setPower(0);
     }
 
     public void disableGripper() {
@@ -124,7 +116,7 @@ public class Robot {
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
 
         armServo = (ServoImplEx) hwmap.servo.get("arm_servo");
-        gripperOneServo = (ServoImplEx) hwmap.servo.get("gripper_one_servo");
+        gripperOneMotor = hwmap.dcMotor.get("gripper_motor");
 
         touchSensor1 = hwmap.get(DigitalChannel.class, "touch_sensor_one");
         touchSensor2 = hwmap.get(DigitalChannel.class, "touch_sensor_two");
@@ -140,7 +132,7 @@ public class Robot {
         linearOpMode = opMode;
         initWithOpMode = true;
 
-        gripperOneServo.setPosition(0.52);
+        gripperOneMotor.setPower(0);
 
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -154,9 +146,6 @@ public class Robot {
         this.armServo.setPosition(position);
     }
 
-    public void setGripperPosition(double position) {
-        this.gripperOneServo.setPosition(position);
-    }
 
     public double inchesToTicks(double inches) {
         double rotation = 1440;
