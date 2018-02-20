@@ -1,7 +1,16 @@
+
+# OpenFTC-app-turbo is to be used at your own risk. 
 # OpenFTC-app-turbo is to be used at your own risk.
 #### While every change is made with care not to break anything, FIRST has not tested our modifications. Volunteers at competitions may be less willing to assist you if you use OpenFTC. Our community is very helpful though, so please create an issue if you encounter any problems.
 
----
+[![Discord](https://img.shields.io/discord/377144270034829324.svg?style=for-the-badge)](https://discord.gg/ameFTnC)
+
+# OpenRC-turbo is to be used at your own risk.
+##### While every change is made with care not to break anything, FIRST has NOT tested our modifications.
+##### Volunteers at competitions may be less willing to assist you if you use OpenRC.
+The OpenFTC community (which created OpenRC) is very helpful, so please create an issue or talk to us on Discord if you
+encounter any problems.
+
 
 [Sign up for our mailing list](http://eepurl.com/dgZbKj) for notifications about updates and upcoming new projects.
 
@@ -13,6 +22,10 @@ be updated within a week of new official app releases.
 The OpenRC documentation is still under construction.
 
 ---
+OpenFTC-app-turbo removes the OnBotJava and Blocks programming systems for teams that don't use them, speeding up deploy time by removing the large files required for those systems. If you use these systems, please see [OpenFTC-app](https://github.com/OpenFTC/OpenFTC-app).
+
+The OpenFTC family of Robot Controller apps provide teams a new way to use the [FTC SDK](https://github.com/ftctechnh/ftc_app) (Software Development Kit). Since the AAR files have been converted to modules in the Android Studio project, it's easy to see and modify the entirety of the SDK's source code. In addition, the history in Git shows all changes that have been made to the core code since OpenFTC's inception. This is a very useful supplement to the changelogs that FIRST provides - teams can see exactly which code has been changed and how it will affect them.
+
 
 OpenRC-turbo removes the OnBotJava and Blocks programming systems for teams that don't use them, speeding up deploy time
 by removing the large files required for those systems. If you use these systems, please see
@@ -30,6 +43,8 @@ structure and functionality of the whole system. Enhancements will be considered
 change their workflow._ Changes made in the OpenRC should keep it possible for teams to move from the official SDK to
 OpenRC with no code changes required.
 The OpenFTC family of Robot Controller apps provide teams a new way to use the [FTC SDK](https://github.com/ftctechnh/ftc_app) (Software Development Kit). Since the AAR files have been converted to modules in the Android Studio project, it's easy to see and modify the entirety of the SDK's source code. In addition, the history in Git shows all changes that have been made to the core code since OpenFTC's inception. This is a very useful supplement to the changelogs that FIRST provides - teams can see exactly which code has been changed and how it will affect them.
+
+To request a new feature, you can open an issue on this repository. If there's a large enough call for the feature, it's very likely to be added to the list for a future release.
 
 To request a new feature, you can open an issue on this repository. If there's a large enough call for the feature, it's
 very likely to be added to the list for a future release.
@@ -704,3 +719,4 @@ In this latest version of the FTC SDK (20150803_001) the following changes shoul
 
 T. Eng
 August 3, 2015
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://ftcforum.usfirst.org/forumdisplay.php?156-FTC-Technology

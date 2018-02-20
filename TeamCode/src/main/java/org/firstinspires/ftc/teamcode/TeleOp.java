@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import static org.firstinspires.ftc.teamcode.Robot.GripperState.CLOSED;
 import static org.firstinspires.ftc.teamcode.Robot.GripperState.MIDDLE;
+import static org.firstinspires.ftc.teamcode.Robot.GripperState.MAX_OPEN;
 /* 124 lines
  * Human-Controlled Operation program v 1.1 */
 
@@ -29,8 +31,6 @@ public class TeleOp extends LinearOpMode {
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
-        robot.arm(robot.armServo.getPosition());
 
         robot.enableGripper();
 

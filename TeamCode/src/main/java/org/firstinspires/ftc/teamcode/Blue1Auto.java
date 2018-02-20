@@ -25,11 +25,12 @@ public class Blue1Auto extends LinearOpMode {
 
         waitForStart();
 
-        /*double speed;
+        double speed;
 
         speed = robot.getJewelSpeed(side);
-        robot.autoDrive(robot.inchesToTicks(1), speed);
-        sleep(2000);*/
+        sleep(500);
+        robot.autoDrive(robot.inchesToTicks(2), speed);
+        sleep(2000);
 
         robot.moveGripperClosed();
 
@@ -37,6 +38,7 @@ public class Blue1Auto extends LinearOpMode {
         while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {
         }
 
+        robot.autoTurn(2000, 1);
         robot.autoDrive(robot.inchesToTicks(30), -1);
 
         robot.autoDrive(robot.inchesToTicks(3), 1);
