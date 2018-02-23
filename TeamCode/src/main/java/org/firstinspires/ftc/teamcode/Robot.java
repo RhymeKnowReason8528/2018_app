@@ -159,11 +159,11 @@ public class Robot {
     }
 
     public void flipRelicGripperDown() {
-        linearExtensionServo.setPosition(linearExtensionFlipDownPos);
+        linearExtensionServo.setPosition(linearExtensionServo.getPosition() + 1);
     }
 
     public void flipRelicGripperUp() {
-        linearExtensionServo.setPosition(linearExtensionFlipUpPos);
+        linearExtensionServo.setPosition(linearExtensionServo.getPosition() - 1);
     }
 
     public void vuforiaInit(HardwareMap hardwareMap, String direction) {

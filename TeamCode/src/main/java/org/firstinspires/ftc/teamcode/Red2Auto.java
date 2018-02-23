@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 
-/* 34 lines
+/* 94 lines
  * Autonomous v 1.0 */
 
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Red 2")
@@ -14,10 +14,6 @@ public class Red2Auto extends LinearOpMode {
     private int blue;
 
     RelicRecoveryVuMark vuMark;
-
-    String displayVuMark = new String();
-
-    boolean isVisibleVuMark;
 
     int side = 1;
 
