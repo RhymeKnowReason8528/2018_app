@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImpl;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -26,8 +28,10 @@ public class Robot {
     DcMotor leftDrive = null;
     DcMotor rightDrive = null;
     public DcMotor gripperOneMotor;
+    DcMotor linearSlideMotor;
     public ServoImplEx armServo;
-
+    public ServoImplEx linearExtensionServo;
+    public ServoImplEx relicServo;
     public ServoImplEx jewelExtension1;
 
     // get a reference to our digitalTouch object.
@@ -119,6 +123,7 @@ public class Robot {
     public void init(HardwareMap hwmap, LinearOpMode opMode) {
         leftDrive = hwmap.dcMotor.get("left_drive");
         rightDrive = hwmap.dcMotor.get("right_drive");
+        linearSlideMotor = hwmap.dcMotor.get("linear_slide_motor");
 
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -134,6 +139,8 @@ public class Robot {
         touchSensor2.setMode(DigitalChannel.Mode.INPUT);
 
         jewelExtension1 = (ServoImplEx) hwmap.servo.get("jewelServoRight");
+        linearExtensionServo = (ServoImplEx) hwmap.servo.get("linear_extension_servo");
+        relicServo = (ServoImplEx) hwmap.servo.get("relic_servo");
 
         jewelT1Retract();
 

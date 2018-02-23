@@ -21,7 +21,9 @@ public class TeleOp extends LinearOpMode {
         double leftPower;
         double rightPower;
 
-        double armPos = 0.3;
+        double armPos = 0.52;
+        double relicExtensionPos = 0.5;
+        double relicGrabberPos = 0.5;
 
         final double ARM_MODIFY = 0.002;
 
@@ -65,12 +67,37 @@ public class TeleOp extends LinearOpMode {
             }
 
             //Drive for 1/3 power
-            if(gamepad1.dpad_up) {
+            if (gamepad1.dpad_up) {
                 leftPower = -0.3;
                 rightPower = -0.3;
             } else if (gamepad1.dpad_down) {
                 leftPower = 0.3;
                 rightPower = 0.3;
+            }
+//-----------------Relic Arm Control----------------
+
+            if (gamepad2.left_stick_y > 0.2) {
+                robot.linearSlideMotor.setPower(1);
+            } else if (gamepad2.left_stick_y < -0.2) {
+                robot.linearSlideMotor.setPower(-1);
+            } else {
+                robot.linearSlideMotor.setPower(0);
+            }
+
+            if(gamepad2.left_bumper) {
+                relicGrabberPos += 0.01;
+            } else if (gamepad2.left_trigger > 0.5) {
+                relicGrabberPos -= 0.01;
+            } else {
+                relicExtensionPos -= 0;
+            }
+
+            if(gamepad2.x) {
+                relicExtensionPos += 0.01;
+            } else if (gamepad2.b) {
+                relicExtensionPos -= 0.01;
+            } else {
+                relicExtensionPos -= 0;
             }
 
 //------------------Gripper Control-----------------
@@ -83,6 +110,8 @@ public class TeleOp extends LinearOpMode {
                     robot.moveGripperClosed();
                 } else if (gamepad2.right_trigger > 0.5) {
                     robot.moveGripperOpen();
+                } else {
+                    robot.gripperOneMotor.setPower(0);
                 }
 
             } else {
@@ -103,6 +132,8 @@ public class TeleOp extends LinearOpMode {
             robot.leftDrive.setPower(leftPower);
             robot.rightDrive.setPower(rightPower);
             robot.arm(armPos);
+            robot.linearExtensionServo.setPosition(relicExtensionPos);
+            robot.relicServo.setPosition(relicGrabberPos);
 
 //------------------Telemetry-----------------
 
@@ -112,6 +143,9 @@ public class TeleOp extends LinearOpMode {
             telemetry.addData("touch sensor 1: ", robot.touchSensor1.getState());
             telemetry.addData("touch sensor 2", robot.touchSensor2.getState());
             telemetry.addData("is gripper disabled", robot.isGripperDisabled());
+            telemetry.addData("arm ", robot.armServo.getPosition());
+            telemetry.addData("extension ", robot.linearExtensionServo.getPosition());
+            telemetry.addData("relic grabber ", robot.relicServo.getPosition());
             telemetry.update();
         }
     }
