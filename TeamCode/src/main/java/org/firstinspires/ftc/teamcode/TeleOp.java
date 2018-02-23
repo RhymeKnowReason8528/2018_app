@@ -88,16 +88,12 @@ public class TeleOp extends LinearOpMode {
                 relicGrabberPos += 0.01;
             } else if (gamepad2.left_trigger > 0.5) {
                 relicGrabberPos -= 0.01;
-            } else {
-                relicExtensionPos -= 0;
             }
 
             if(gamepad2.x) {
-                relicExtensionPos += 0.01;
+                robot.flipRelicGripperDown();
             } else if (gamepad2.b) {
-                relicExtensionPos -= 0.01;
-            } else {
-                relicExtensionPos -= 0;
+                robot.flipRelicGripperUp();
             }
 
 //------------------Gripper Control-----------------

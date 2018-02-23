@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 
 /* 34 lines
  * Autonomous v 1.0 */
@@ -13,12 +13,19 @@ public class Red2Auto extends LinearOpMode {
     private int red;
     private int blue;
 
+    RelicRecoveryVuMark vuMark;
+
+    String displayVuMark = new String();
+
+    boolean isVisibleVuMark;
+
     int side = 1;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         robot.init(hardwareMap, this);
+        robot.vuforiaInit(hardwareMap, "right");
         double currentRunTime = getRuntime();
 
         blue = robot.getBlue(1);
@@ -44,7 +51,38 @@ public class Red2Auto extends LinearOpMode {
         while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {
         }
 
-        robot.autoDrive(robot.inchesToTicks(30), -1);
+//--------------------------------------get vumark and drive to cryptobox---------------------------------------------------------
+
+        robot.relicTrackables.activate();
+        robot.autoDrive(robot.inchesToTicks(5), -1);
+        vuMark = RelicRecoveryVuMark.from(robot.relicTemplate);
+        robot.autoDrive(robot.inchesToTicks(5), -1);
+        if (vuMark == RelicRecoveryVuMark.UNKNOWN) {
+            vuMark = RelicRecoveryVuMark.from(robot.relicTemplate);
+        }
+        robot.autoDrive(robot.inchesToTicks(5), -1);
+        if (vuMark == RelicRecoveryVuMark.UNKNOWN) {
+            vuMark = RelicRecoveryVuMark.from(robot.relicTemplate);
+        }
+        robot.autoDrive(robot.inchesToTicks(5), -1);
+        if (vuMark == RelicRecoveryVuMark.UNKNOWN) {
+            vuMark = RelicRecoveryVuMark.from(robot.relicTemplate);
+        }
+        robot.autoDrive(robot.inchesToTicks(5), -1);
+        if (vuMark == RelicRecoveryVuMark.UNKNOWN) {
+            vuMark = RelicRecoveryVuMark.from(robot.relicTemplate);
+        }
+
+//-----------------------------------------------------------------------------------------------------------------------------------
+
+        if (vuMark == RelicRecoveryVuMark.UNKNOWN) {
+            robot.autoDrive(robot.inchesToTicks(5), -1);
+        } else if (vuMark == RelicRecoveryVuMark.CENTER) {
+            robot.autoDrive(robot.inchesToTicks(4), -1);
+        } else if (vuMark == RelicRecoveryVuMark.RIGHT) {
+            robot.autoDrive(robot.inchesToTicks(7), -1);
+        }
+
         robot.autoTurn(1800, 1);
         currentRunTime = getRuntime();
         while(getRuntime() < 1 + currentRunTime && opModeIsActive()) {

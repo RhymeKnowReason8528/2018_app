@@ -60,12 +60,15 @@ public class Robot {
     private final double jewelExtendedPosition = 0.1;
     private final double jewelRetractPosition = 0.7;
 
+    private final double linearExtensionFlipDownPos = 0.5;
+    private final double linearExtensionFlipUpPos = 0.5;
+
     int ballDifference = 10;
 
     VuforiaLocalizer vuforia_localizer;
 
     enum GripperState {
-        MAX_OPEN, //MAX_OPEN might be used once limit switches are added for the open limit
+        MAX_OPEN, //TODO: MAX_OPEN might be used once limit switches are added for the open limit
         CLOSED,
         MIDDLE
     }
@@ -153,6 +156,14 @@ public class Robot {
 
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public void flipRelicGripperDown() {
+        linearExtensionServo.setPosition(linearExtensionFlipDownPos);
+    }
+
+    public void flipRelicGripperUp() {
+        linearExtensionServo.setPosition(linearExtensionFlipUpPos);
     }
 
     public void vuforiaInit(HardwareMap hardwareMap, String direction) {
